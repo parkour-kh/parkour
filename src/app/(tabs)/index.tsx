@@ -15,7 +15,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import CampusDestinationSearch, { SelectedPlace } from "../components/CampusDestinationSearch";
+import CampusDestinationSearch, { SelectedPlace } from "../../components/CampusDestinationSearch";
 
 const COLORS = {
   background: "#F8FAF8",
@@ -72,7 +72,7 @@ export default function HomeScreen() {
 
         {/* UCF HERO IMAGE */}
         <ImageBackground
-          source={require("../../assets/images/millican-hall.jpg")}
+          source={require("../../../assets/images/millican-hall.jpg")}
           style={styles.hero}
           imageStyle={styles.heroImage}
           resizeMode="cover"
@@ -164,7 +164,13 @@ export default function HomeScreen() {
             <TouchableOpacity
               key={item.title}
               style={styles.journeyCard}
-              onPress={() => showComingSoon(item.title)}
+             onPress={() => {
+  if (item.title === "Already parked?") {
+    router.push("/my-spot");
+  } else {
+    showComingSoon(item.title);
+  }
+}}
             >
               <Ionicons
                 name={item.icon}
