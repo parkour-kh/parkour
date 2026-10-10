@@ -1,3 +1,4 @@
+
 import { DarkTheme, DefaultTheme, ThemeProvider, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useColorScheme } from "react-native";
@@ -15,6 +16,7 @@ export default function RootLayout() {
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="my-spot" />
+        <Stack.Screen name="parking-essentials" />
       </Stack>
     </ThemeProvider>
   );
