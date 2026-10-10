@@ -1,1 +1,5 @@
 flask
+python-dotenv
+pyserial
+google-genai
+# opencv-python   # only if you keep the cv/ track
