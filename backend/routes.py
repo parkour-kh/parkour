@@ -119,3 +119,10 @@ def list_reports():
 @bp.post("/chat")
 def chat():
     return error("chat is not implemented yet", 501)
+
+
+# ---------- ElevenLabs accessible speech ----------
+@bp.post("/voice")
+def voice():
+    from voice import generate_voice
+    return generate_voice()
