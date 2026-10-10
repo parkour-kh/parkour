@@ -4,7 +4,7 @@ import os
 from flask import Blueprint, jsonify, request
 from google import genai
 
-chat_bp = Blueprint("chat", __name__, url_prefix="/api")
+chat_bp = Blueprint("chat", __name__, url_prefix="/api/assistant")
 
 
 @chat_bp.post("/chat")
