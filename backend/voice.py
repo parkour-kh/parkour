@@ -9,12 +9,31 @@ Mount in backend/routes.py on the backend branch:
 Requires ELEVENLABS_API_KEY in Render environment. Do not commit keys.
 """
 import os
+import time
+from collections import defaultdict, deque
+from threading import Lock
 import urllib.error
 import urllib.request
 
 from flask import Response, jsonify, request
 
 DEFAULT_VOICE_ID = "JBFqnCBsd6RMkjVDRZzb"
+_RATE_WINDOW = 60
+_RATE_MAX = 5
+_requests = defaultdict(deque)
+_rate_lock = Lock()
+
+
+def within_rate_limit(client):
+    now = time.monotonic()
+    with _rate_lock:
+        timestamps = _requests[client]
+        while timestamps and now - timestamps[0] > _RATE_WINDOW:
+            timestamps.popleft()
+        if len(timestamps) >= _RATE_MAX:
+            return False
+        timestamps.append(now)
+        return True
 
 
 def generate_voice():
@@ -22,6 +41,9 @@ def generate_voice():
     text = data.get("text")
     if not isinstance(text, str) or not text.strip() or len(text) > 1500:
         return jsonify(error="Text must be between 1 and 1500 characters"), 400
+
+    if not within_rate_limit(request.remote_addr or "unknown"):
+        return jsonify(error="Too many voice requests; try again in a minute"), 429
 
     api_key = os.environ.get("ELEVENLABS_API_KEY")
     if not api_key:
