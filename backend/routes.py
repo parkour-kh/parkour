@@ -1,7 +1,11 @@
+import hmac
+import os
+
 from flask import Blueprint, jsonify, request
 
+import gemini_client
 import store
-from recommend import recommend
+from recommend import VALID_USER_TYPES, recommend
 
 bp = Blueprint("api", __name__, url_prefix="/api")
 
@@ -14,6 +18,15 @@ def error(message, status=400):
 
 def body():
     return request.get_json(silent=True) or {}
+
+
+def sensor_authorized():
+    """If SENSOR_TOKEN is set in .env, changing a spot's OPEN/TAKEN status requires the
+    matching X-Sensor-Token header (the Pi bridge sends it). If it's not set, anyone can."""
+    token = os.getenv("SENSOR_TOKEN")
+    if not token:
+        return True
+    return hmac.compare_digest(request.headers.get("X-Sensor-Token", ""), token)
 
 
 # ---------- legacy: keeps the old "Entrance count" page working ----------
@@ -73,6 +86,8 @@ def update_spot(spot_id):
         return error("narrow must be true or false")
     if status is None and narrow is None:
         return error("send status and/or narrow")
+    if status is not None and not sensor_authorized():
+        return error("bad or missing X-Sensor-Token", 401)
     spot = store.update_spot(spot_id, status=status, narrow=narrow)
     if spot is None:
         return error("spot not found", 404)
@@ -115,7 +130,30 @@ def list_reports():
     return jsonify(store.list_reports())
 
 
-# ---------- Gemini (Phase 4) ----------
+# ---------- Gemini assistant ----------
 @bp.post("/chat")
 def chat():
-    return error("chat is not implemented yet", 501)
+    b = body()
+    message = (b.get("message") or "").strip()
+    if not message:
+        return error("message is required")
+    if len(message) > 500:
+        return error("message too long (500 characters max)")
+    user_type = b.get("user_type", "student")
+    if user_type not in VALID_USER_TYPES:
+        return error(f"user_type must be one of {VALID_USER_TYPES}")
+
+    data = store.snapshot()
+    dest_id, parsed_by_ai = gemini_client.parse_destination(message, data["destinations"])
+    if dest_id is None:
+        names = ", ".join(d["name"] for d in data["destinations"])
+        return jsonify(destination=None, recommendation=None, ai_used=parsed_by_ai,
+                       reply=f"I couldn't tell which building you're headed to. I know: {names}.")
+
+    result = recommend(data, dest_id, user_type,
+                       accessible=bool(b.get("accessible", False)),
+                       time_str=b.get("time"),
+                       large_vehicle=bool(b.get("large_vehicle", False)))
+    reply, explained_by_ai = gemini_client.explain(message, result)
+    return jsonify(destination=dest_id, recommendation=result, reply=reply,
+                   ai_used=parsed_by_ai or explained_by_ai)
