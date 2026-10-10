@@ -1,0 +1,28 @@
+# Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Dependencies and generated files
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.expo/
+.expo-shared/
+dist/
+build/
+
+# Local backups and temporary output
+backups/
+*.backup
+*.bak
+*.before-*
+parkour-file-list.txt
+.DS_Store
+Thumbs.db
+
+*.zip
