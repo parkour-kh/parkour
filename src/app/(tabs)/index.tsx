@@ -174,7 +174,7 @@ onPress={() => {
   } else if (item.title === "Parking essentials") {
     router.push("/parking-essentials");
   } else {
-    showComingSoon(item.title);
+    router.push("/voice-accessibility");
   }
 }}
 
