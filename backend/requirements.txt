@@ -4,3 +4,4 @@ pyserial
 google-genai
 gunicorn
 # opencv-python   # only if you keep the cv/ track
+requests
