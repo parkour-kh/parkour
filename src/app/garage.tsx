@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from "react";
+
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ScrollView,
   View,
@@ -6,71 +7,88 @@ import {
   Pressable,
   StyleSheet,
 } from "react-native";
-
-type Spot = {
-  id: string;
-  occupied: boolean;
-};
-
-type FloorNumber = 1 | 2 | 3;
+import {
+  getGarageFloors,
+  type GarageFloors,
+  type ParkingSpot,
+} from "../constants/api";
 
 const GREEN = "#344238";
 const GOLD = "#D4AF37";
 const CREAM = "#F8FAF8";
 const DARK = "#242424";
 
-function createFloor(floor: FloorNumber): Spot[] {
-  return Array.from({ length: 24 }, (_, i) => ({
-    id: `${floor}-${String(i + 1).padStart(2, "0")}`,
-    occupied: (i * 7 + floor * 3) % 9 < 3,
-  }));
-}
+export default function GarageScreen({
+  garageName = "Garage A",
+}: {
+  garageName?: string;
+}) {
+  const garageId = garageName === "Garage B" ? "B" : "A";
 
-export default function GarageScreen({ garageName = "Garage A" }: { garageName?: string }) {
-  const [floor, setFloor] = useState<FloorNumber>(1);
-  const [floors, setFloors] = useState<Record<FloorNumber, Spot[]>>({
-    1: createFloor(1),
-    2: createFloor(2),
-    3: createFloor(3),
-  });
+  const [floor, setFloor] = useState("1");
+  const [floors, setFloors] = useState<GarageFloors>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [savedSpot, setSavedSpot] = useState<string | null>(null);
 
-  const spots = floors[floor];
+  const loadGarage = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await getGarageFloors(garageId);
+      setFloors(data);
+      setFloor((current) =>
+        data[current] ? current : Object.keys(data)[0] ?? "1"
+      );
+      setError(false);
+    } catch (err) {
+      console.error("Could not load garage:", err);
+      setError(true);
+      setFloors({});
+    } finally {
+      setLoading(false);
+    }
+  }, [garageId]);
 
-  const available = spots.filter((spot) => !spot.occupied).length;
-  const totalAvailable = Object.values(floors)
-    .flat()
-    .filter((spot) => !spot.occupied).length;
+  useEffect(() => {
+    loadGarage();
+  }, [loadGarage]);
+
+  const floorNumbers = Object.keys(floors);
+  const spots = floors[floor] ?? [];
+
+  const available = spots.filter(
+    (spot) => spot.status === "OPEN"
+  ).length;
+
+  const allSpots = Object.values(floors).flat();
+
+  const totalAvailable = allSpots.filter(
+    (spot) => spot.status === "OPEN"
+  ).length;
 
   const recommended = useMemo(
-    () => spots.find((spot) => !spot.occupied)?.id ?? null,
+    () => spots.find((spot) => spot.status === "OPEN")?.id ?? null,
     [spots]
   );
 
-  function toggleSpot(id: string) {
-    setFloors((current) => ({
-      ...current,
-      [floor]: current[floor].map((spot) =>
-        spot.id === id ? { ...spot, occupied: !spot.occupied } : spot
-      ),
-    }));
-  }
-
-  function renderSpot(spot: Spot) {
+  function renderSpot(spot: ParkingSpot) {
     const isRecommended = spot.id === recommended;
 
     return (
       <Pressable
         key={spot.id}
-        onPress={() => toggleSpot(spot.id)}
         style={[
           styles.spot,
-          spot.occupied ? styles.taken : styles.open,
+          spot.status === "TAKEN" ? styles.taken : styles.open,
           isRecommended && styles.recommendedSpot,
         ]}
       >
-        <Text style={styles.spotIcon}>{spot.occupied ? "🚗" : "✓"}</Text>
-        <Text style={styles.spotId}>{spot.id.split("-")[1]}</Text>
+        <Text style={styles.spotIcon}>
+          {spot.status === "TAKEN" ? "🚗" : "✓"}
+        </Text>
+        <Text style={styles.spotId}>
+          {spot.id.split("-").pop()}
+        </Text>
       </Pressable>
     );
   }
@@ -87,98 +105,138 @@ export default function GarageScreen({ garageName = "Garage A" }: { garageName?:
         Find your space, without the guesswork.
       </Text>
 
-      <View style={styles.summary}>
-        <View>
-          <Text style={styles.summaryLabel}>AVAILABLE SPACES</Text>
-          <Text style={styles.summaryNumber}>{totalAvailable}<Text style={styles.summaryTotal}> / 72</Text></Text>
-        </View>
-        <View style={styles.summaryIcon}>
-          <Text style={styles.summaryCar}>P</Text>
-        </View>
-      </View>
-
-      <Text style={styles.sectionTitle}>Select a floor</Text>
-      <View style={styles.floorRow}>
-        {([1, 2, 3] as FloorNumber[]).map((number) => (
-          <Pressable
-            key={number}
-            onPress={() => setFloor(number)}
-            style={[
-              styles.floorButton,
-              floor === number && styles.floorSelected,
-            ]}
-          >
-            <Text
-              style={[
-                styles.floorText,
-                floor === number && styles.floorTextSelected,
-              ]}
-            >
-              Floor {number}
-            </Text>
-          </Pressable>
-        ))}
-      </View>
-
-      <View style={styles.floorHeading}>
-        <Text style={styles.sectionTitle}>Floor {floor}</Text>
-        <Text style={styles.floorAvailability}>{available} open</Text>
-      </View>
-
-      <View style={styles.legend}>
-        <Text style={styles.legendText}>🟢 Open</Text>
-        <Text style={styles.legendText}>⚪ Taken</Text>
-        <Text style={styles.legendText}>⭐ Recommended</Text>
-      </View>
-
-      <View style={styles.garage}>
-        <View style={styles.spotRow}>
-          {spots.slice(0, 12).map(renderSpot)}
-        </View>
-
-        <View style={styles.driveLane}>
-          <Text style={styles.driveLaneText}>← DRIVE LANE →</Text>
-        </View>
-
-        <View style={styles.spotRow}>
-          {spots.slice(12, 24).map(renderSpot)}
-        </View>
-      </View>
-
-      <Text style={styles.helper}>
-        Tap any space to simulate a car arriving or leaving.
+      <Text style={styles.disclaimer}>
+        ONLINE DEMO DATA · NOT LIVE UCF AVAILABILITY
       </Text>
 
-      <View style={styles.recommendation}>
-        <Text style={styles.recommendationEyebrow}>YOUR BEST AVAILABLE SPACE</Text>
-        <Text style={styles.recommendationTitle}>
-          {recommended ? `Floor ${floor} · Spot ${recommended.split("-")[1]}` : "Floor full"}
-        </Text>
-        <Text style={styles.recommendationDetail}>
-          {recommended
-            ? "Highlighted in gold on the garage map."
-            : "Try selecting another floor."}
-        </Text>
-
-        {recommended && (
+      {loading ? (
+        <Text style={styles.helper}>Loading parking spaces...</Text>
+      ) : error ? (
+        <View>
+          <Text style={styles.helper}>
+            Couldn't connect to the parking server.
+          </Text>
           <Pressable
             style={styles.saveButton}
-            onPress={() => setSavedSpot(recommended)}
+            onPress={loadGarage}
           >
-            <Text style={styles.saveText}>Save My Spot</Text>
+            <Text style={styles.saveText}>Try Again</Text>
           </Pressable>
-        )}
+        </View>
+      ) : (
+        <>
+          <View style={styles.summary}>
+            <View>
+              <Text style={styles.summaryLabel}>AVAILABLE SPACES</Text>
+              <Text style={styles.summaryNumber}>
+                {totalAvailable}
+                <Text style={styles.summaryTotal}>
+                  {" / "}{allSpots.length}
+                </Text>
+              </Text>
+            </View>
+            <View style={styles.summaryIcon}>
+              <Text style={styles.summaryCar}>P</Text>
+            </View>
+          </View>
 
-        {savedSpot && (
-          <Text style={styles.savedText}>
-            Saved: Floor {savedSpot.split("-")[0]}, Spot {savedSpot.split("-")[1]}
+          <Text style={styles.sectionTitle}>Select a floor</Text>
+          <View style={styles.floorRow}>
+            {floorNumbers.map((number) => (
+              <Pressable
+                key={number}
+                onPress={() => setFloor(number)}
+                style={[
+                  styles.floorButton,
+                  floor === number && styles.floorSelected,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.floorText,
+                    floor === number && styles.floorTextSelected,
+                  ]}
+                >
+                  Floor {number}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
+
+          <View style={styles.floorHeading}>
+            <Text style={styles.sectionTitle}>Floor {floor}</Text>
+            <Text style={styles.floorAvailability}>
+              {available} open
+            </Text>
+          </View>
+
+          <View style={styles.legend}>
+            <Text style={styles.legendText}>🟢 Open</Text>
+            <Text style={styles.legendText}>⚪ Taken</Text>
+            <Text style={styles.legendText}>⭐ Recommended</Text>
+          </View>
+
+          <View style={styles.garage}>
+            <View style={styles.spotRow}>
+              {spots.slice(0, Math.ceil(spots.length / 2)).map(renderSpot)}
+            </View>
+
+            <View style={styles.driveLane}>
+              <Text style={styles.driveLaneText}>← DRIVE LANE →</Text>
+            </View>
+
+            <View style={styles.spotRow}>
+              {spots.slice(Math.ceil(spots.length / 2)).map(renderSpot)}
+            </View>
+          </View>
+
+          <Text style={styles.helper}>
+            Parking spaces are read-only in the online demo.
           </Text>
-        )}
-      </View>
 
-      <Text style={styles.disclaimer}>
-        Prototype parking data. Live Raspberry Pi updates coming next.
-      </Text>
+          <Pressable
+            style={styles.saveButton}
+            onPress={loadGarage}
+          >
+            <Text style={styles.saveText}>Refresh Availability</Text>
+          </Pressable>
+
+          <View style={styles.recommendation}>
+            <Text style={styles.recommendationEyebrow}>
+              SUGGESTED AVAILABLE SPACE
+            </Text>
+            <Text style={styles.recommendationTitle}>
+              {recommended
+                ? `Floor ${floor} · Spot ${recommended.split("-").pop()}`
+                : "Floor full"}
+            </Text>
+            <Text style={styles.recommendationDetail}>
+              {recommended
+                ? "Highlighted in gold on the garage map."
+                : "Try selecting another floor."}
+            </Text>
+
+            {recommended && (
+              <Pressable
+                style={styles.saveButton}
+                onPress={() => setSavedSpot(recommended)}
+              >
+                <Text style={styles.saveText}>Save My Spot</Text>
+              </Pressable>
+            )}
+
+            {savedSpot && (
+              <Text style={styles.savedText}>
+                Saved: {savedSpot}
+              </Text>
+            )}
+          </View>
+
+          <Text style={styles.disclaimer}>
+            Prototype parking data. Live Raspberry Pi updates coming next.
+          </Text>
+        </>
+      )}
     </ScrollView>
   );
 }

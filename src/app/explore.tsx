@@ -1,5 +1,5 @@
 import GarageScreen from "./garage";
-
+import { getGarages } from "../constants/api";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -83,6 +83,48 @@ export default function ExploreScreen() {
   const [selectedGarageId, setSelectedGarageId] =
     useState<string | null>(null);
   const [simulateFull, setSimulateFull] = useState(false);
+  const [onlineGarages, setOnlineGarages] = useState<
+  Record<string, number>
+>({});
+
+const [onlineStatus, setOnlineStatus] = useState<
+  "loading" | "connected" | "error"
+>("loading");
+
+useEffect(() => {
+  let active = true;
+
+  async function loadOnlineGarages() {
+    try {
+      const garages: {
+        id: string;
+        name: string;
+        available: number;
+        total: number;
+      }[] = await getGarages();
+
+      if (!active) return;
+
+      const counts: Record<string, number> = {};
+
+      garages.forEach((garage) => {
+        counts[garage.id.toLowerCase()] = garage.available;
+      });
+
+      setOnlineGarages(counts);
+      setOnlineStatus("connected");
+    } catch (error) {
+      console.error("Failed to load online garages:", error);
+      if (active) setOnlineStatus("error");
+    }
+  }
+
+  loadOnlineGarages();
+
+  return () => {
+    active = false;
+  };
+}, []);
   const [showGarageDetails, setShowGarageDetails] = useState(false);
   const [hasLocationPermission, setHasLocationPermission] =
     useState(false);
@@ -95,9 +137,15 @@ export default function ExploreScreen() {
       .map((garage) => ({
         ...garage,
         available:
-          simulateFull && garage.id === "b"
-            ? 0
-            : garage.available,
+  simulateFull && garage.id.toLowerCase() === "b"
+    ? 0
+    : onlineStatus === "connected" &&
+        Object.prototype.hasOwnProperty.call(
+          onlineGarages,
+          garage.id.toLowerCase()
+        )
+      ? onlineGarages[garage.id.toLowerCase()]
+      : garage.available,
         distance: distanceMeters(
           garage.latitude,
           garage.longitude,
@@ -124,7 +172,14 @@ export default function ExploreScreen() {
 
   useEffect(() => {
     setSelectedGarageId(null);
-  }, [destination.latitude, destination.longitude, permit]);
+  }, [
+  destination.latitude,
+  destination.longitude,
+  permit,
+  simulateFull,
+  onlineGarages,
+  onlineStatus,
+]);
 
   async function showMyLocation() {
     try {
@@ -319,6 +374,20 @@ export default function ExploreScreen() {
         style={styles.bottomPanel}
         contentContainerStyle={styles.bottomContent}
       >
+      <Text
+  style={{
+    color: onlineStatus === "connected" ? "#344238" : "#82661F",
+    fontSize: 12,
+    fontWeight: "700",
+    marginBottom: 12,
+  }}
+>
+  {onlineStatus === "loading"
+    ? "Connecting to Parkour server..."
+    : onlineStatus === "connected"
+      ? "Connected to Parkour online demo"
+      : "Server unavailable — showing local demo estimates"}
+</Text>
         <View style={styles.demoBanner}>
           <Ionicons
             name="information-circle-outline"
