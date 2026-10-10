@@ -164,13 +164,21 @@ export default function HomeScreen() {
             <TouchableOpacity
               key={item.title}
               style={styles.journeyCard}
-             onPress={() => {
+             
+
+onPress={() => {
+  console.log("Tapped:", item.title);
+
   if (item.title === "Already parked?") {
     router.push("/my-spot");
+  } else if (item.title === "Parking essentials") {
+    router.push("/parking-essentials");
   } else {
     showComingSoon(item.title);
   }
 }}
+
+
             >
               <Ionicons
                 name={item.icon}
