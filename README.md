@@ -1,26 +1,53 @@
-# Parkour — UCF parking prototype
+# Parkour 🚗
 
-Parkour is a hackathon prototype that recommends sample UCF parking garages based on a chosen campus destination and permit type, and displays a simulated garage-floor view.
+**Find parking on campus without the guesswork.**
 
-## Project layout
+Parkour is a student-built parking app prototype for UCF, created for a hackathon. The goal is to help students choose a parking garage near where they need to go and find a place to park.
 
-- `mobile/`: Expo / React Native application
-- `mobile/src/app/`: app screens
-- `mobile/src/components/`: reusable UI components
-- `mobile/src/data/parking.ts`: demo garage and destination information
-- `backend/`: optional FastAPI Google Places prototype
+## What can Parkour do?
 
-## Run the mobile app
+- **Choose your destination:** Select a campus location you're heading to.
+- **Choose your permit:** Pick Student or Employee to see matching demo garage recommendations.
+- **Compare garages:** See suggested garages and their estimated walking distances.
+- **Explore parking floors:** Open a garage to view a visual layout of sample parking spaces.
+- **Save your spot:** Use the prototype's parking-space selection feature to remember where you parked.
 
-1. Install Node.js and run `cd mobile`.
-2. Run `npm install`.
-3. Run `npx expo start --clear --tunnel` (or `npx expo start` on the same network).
-4. Open the project with Expo Go on a compatible phone.
+## How to run the app
 
-## Optional backend
+You need **Node.js** installed on your computer and **Expo Go** on your phone.
 
-From `backend/`, create a Python virtual environment and run `pip install -r requirements.txt`. Set `GOOGLE_PLACES_API_KEY` in a local `.env` file (never commit it). Run `uvicorn main:app --reload`. The current mobile destination search uses local demo data and does not require the backend.
+1. Download or clone this repository.
+2. Open a terminal in the project folder.
+3. Run these commands:
 
-## Prototype limitations
+```powershell
+cd mobile
+npm install
+npx expo start --clear --tunnel
+```
 
-Garage locations, permit rules, capacity, availability, and individual parking-space occupancy are sample values, **not live UCF parking information**. The garage detail screen has an independent 72-space simulation, so its count is not yet synchronized with the Explore overview. Directions currently highlight a garage on the map rather than providing turn-by-turn navigation. Verify real-world garage entrances and parking restrictions before any production use.
+4. Scan the QR code using Expo Go to open the app.
+
+If you're already inside the `mobile` folder, skip `cd mobile`.
+
+## Where is the code?
+
+- `mobile/` — the phone app.
+- `mobile/src/app/` — screens such as Home, Explore, and Garage.
+- `mobile/src/components/` — reusable parts of the interface.
+- `mobile/src/data/parking.ts` — sample destinations and garage information.
+- `backend/` — experimental Python code for Google Places; **not required** to run the current app.
+
+## What's real, and what's a demo?
+
+**Parkour is still a prototype.** The garage locations, permit rules, available-space counts, and individual parking spots currently use sample data. They do **not** show real-time UCF parking availability. The garage floor simulation isn't synchronized with the garage availability numbers on the Explore screen yet.
+
+The directions feature currently highlights a garage on the map; it does not provide full turn-by-turn navigation.
+
+## What we're working toward
+
+We want to connect parking availability to real occupancy information, improve navigation, and make it easier to find your car after parking.
+
+---
+
+**Built for a hackathon.** Please follow official UCF parking signs and rules rather than relying on the demo data.
