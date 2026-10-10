@@ -1,13 +1,9 @@
 # Parkour 🚗
 
-**Find parking on campus without the guesswork.**
-
-Parkour is a student-built parking app prototype for UCF, created for a hackathon. The goal is to help students choose a parking garage near where they need to go and find a place to park.
-
 ## What can Parkour do?
 
 - **Choose your destination:** Select a campus location you're heading to.
-- **Choose your permit:** Pick Student or Employee to see matching demo garage recommendations.
+- **Choose your permit:** Pick Student or Employee to see matching garage recommendations.
 - **Compare garages:** See suggested garages and their estimated walking distances.
 - **Explore parking floors:** Open a garage to view a visual layout of sample parking spaces.
 - **Save your spot:** Use the prototype's parking-space selection feature to remember where you parked.
@@ -30,24 +26,17 @@ npx expo start --clear --tunnel
 
 If you're already inside the `mobile` folder, skip `cd mobile`.
 
-## Where is the code?
+## code?
 
 - `mobile/` — the phone app.
 - `mobile/src/app/` — screens such as Home, Explore, and Garage.
 - `mobile/src/components/` — reusable parts of the interface.
 - `mobile/src/data/parking.ts` — sample destinations and garage information.
-- `backend/` — experimental Python code for Google Places; **not required** to run the current app.
-
+- 
 ## What's real, and what's a demo?
 
-**Parkour is still a prototype.** The garage locations, permit rules, available-space counts, and individual parking spots currently use sample data. They do **not** show real-time UCF parking availability. The garage floor simulation isn't synchronized with the garage availability numbers on the Explore screen yet.
+The garage locations, permit rules, available-space counts, and individual parking spots currently use sample data. They do **not** show real-time UCF parking availability. The garage floor simulation isn't synchronized with the garage availability numbers on the Explore screen yet. The directions feature currently highlights a garage on the map; it does not provide full turn-by-turn navigation.
 
-The directions feature currently highlights a garage on the map; it does not provide full turn-by-turn navigation.
-
-## What we're working toward
+## Working towards
 
 We want to connect parking availability to real occupancy information, improve navigation, and make it easier to find your car after parking.
-
----
-
-**Built for a hackathon.** Please follow official UCF parking signs and rules rather than relying on the demo data.
