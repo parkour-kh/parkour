@@ -173,6 +173,8 @@ onPress={() => {
     router.push("/my-spot");
   } else if (item.title === "Parking essentials") {
     router.push("/parking-essentials");
+  } else if (item.title === "Need assistance?") {
+    router.push("/need-assistance");
   } else {
     showComingSoon(item.title);
   }
