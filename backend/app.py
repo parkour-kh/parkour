@@ -1,18 +1,17 @@
 import os
-
 from dotenv import load_dotenv
 from flask import Flask
 from flask_cors import CORS
 
-load_dotenv()  # reads backend/.env (GEMINI_API_KEY, SENSOR_TOKEN...; never commit it)
+load_dotenv()
 
-from routes import bp  # noqa: E402  (after load_dotenv so later modules see the env vars)
+from routes import bp  # noqa: E402
+from voice import voice_bp  # noqa: E402
 
 app = Flask(__name__, static_folder="dashboard", static_url_path="")
-CORS(app, resources={r"/api/*": {"origins": "*"}})  # lets Expo web (a browser) call this API
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 app.register_blueprint(bp)
+app.register_blueprint(voice_bp)
 
 if __name__ == "__main__":
-    # host="0.0.0.0" lets a phone/laptop on the same Wi-Fi reach this machine.
-    # debug=True is for local dev only -- use gunicorn when deploying (see README).
     app.run(host="0.0.0.0", port=int(os.getenv("PORT", 5000)), debug=True)
