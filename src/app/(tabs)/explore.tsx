@@ -16,7 +16,7 @@ import * as Location from "expo-location";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 
-import { DESTINATIONS, GARAGES, type Garage, type Permit } from "../data/parking";
+import { DESTINATIONS, GARAGES, type Garage, type Permit } from "../../data/parking";
 
 function distanceMeters(
   lat1: number,
