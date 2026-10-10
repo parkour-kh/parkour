@@ -1,0 +1,5229 @@
+{
+ "garages": [
+  {
+   "id": "a",
+   "name": "Garage A",
+   "latitude": 28.6,
+   "longitude": -81.2034,
+   "permits": [
+    "Student",
+    "Employee"
+   ],
+   "capacity": 120,
+   "exits": [
+    {
+     "id": "a-exit-1",
+     "kind": "exit",
+     "label": "Campus-side exit"
+    },
+    {
+     "id": "a-exit-2",
+     "kind": "exit",
+     "label": "Outer exit"
+    },
+    {
+     "id": "a-elev",
+     "kind": "elevator",
+     "label": "Elevator"
+    }
+   ]
+  },
+  {
+   "id": "b",
+   "name": "Garage B",
+   "latitude": 28.603,
+   "longitude": -81.2025,
+   "permits": [
+    "Student",
+    "Employee"
+   ],
+   "capacity": 150,
+   "exits": [
+    {
+     "id": "b-exit-1",
+     "kind": "exit",
+     "label": "Campus-side exit"
+    },
+    {
+     "id": "b-exit-2",
+     "kind": "exit",
+     "label": "Outer exit"
+    },
+    {
+     "id": "b-elev",
+     "kind": "elevator",
+     "label": "Elevator"
+    }
+   ]
+  },
+  {
+   "id": "c",
+   "name": "Garage C",
+   "latitude": 28.6042,
+   "longitude": -81.1988,
+   "permits": [
+    "Student",
+    "Employee"
+   ],
+   "capacity": 180,
+   "exits": [
+    {
+     "id": "c-exit-1",
+     "kind": "exit",
+     "label": "Campus-side exit"
+    },
+    {
+     "id": "c-exit-2",
+     "kind": "exit",
+     "label": "Outer exit"
+    },
+    {
+     "id": "c-elev",
+     "kind": "elevator",
+     "label": "Elevator"
+    }
+   ]
+  },
+  {
+   "id": "d",
+   "name": "Garage D",
+   "latitude": 28.599,
+   "longitude": -81.1975,
+   "permits": [
+    "Employee"
+   ],
+   "capacity": 100,
+   "exits": [
+    {
+     "id": "d-exit-1",
+     "kind": "exit",
+     "label": "Campus-side exit"
+    },
+    {
+     "id": "d-exit-2",
+     "kind": "exit",
+     "label": "Outer exit"
+    },
+    {
+     "id": "d-elev",
+     "kind": "elevator",
+     "label": "Elevator"
+    }
+   ]
+  }
+ ],
+ "destinations": [
+  {
+   "id": "library",
+   "name": "John C. Hitt Library",
+   "latitude": 28.6005,
+   "longitude": -81.2004,
+   "walk": {
+    "a-exit-1": 4.0,
+    "a-exit-2": 5.5,
+    "a-elev": 5.0,
+    "b-exit-1": 5.0,
+    "b-exit-2": 6.5,
+    "b-elev": 5.5,
+    "c-exit-1": 6.0,
+    "c-exit-2": 8.0,
+    "c-elev": 7.0,
+    "d-exit-1": 4.5,
+    "d-exit-2": 6.5,
+    "d-elev": 5.5
+   }
+  },
+  {
+   "id": "student-union",
+   "name": "Student Union",
+   "latitude": 28.6017,
+   "longitude": -81.2002,
+   "walk": {
+    "a-exit-1": 5.0,
+    "a-exit-2": 7.0,
+    "a-elev": 6.0,
+    "b-exit-1": 3.5,
+    "b-exit-2": 5.5,
+    "b-elev": 4.5,
+    "c-exit-1": 4.0,
+    "c-exit-2": 6.0,
+    "c-elev": 5.0,
+    "d-exit-1": 5.5,
+    "d-exit-2": 7.5,
+    "d-elev": 6.5
+   }
+  },
+  {
+   "id": "engineering",
+   "name": "Engineering Building",
+   "latitude": 28.6014,
+   "longitude": -81.1984,
+   "walk": {
+    "a-exit-1": 7.5,
+    "a-exit-2": 9.5,
+    "a-elev": 8.5,
+    "b-exit-1": 6.0,
+    "b-exit-2": 8.0,
+    "b-elev": 7.0,
+    "c-exit-1": 4.5,
+    "c-exit-2": 6.0,
+    "c-elev": 5.0,
+    "d-exit-1": 3.5,
+    "d-exit-2": 5.5,
+    "d-elev": 4.5
+   }
+  },
+  {
+   "id": "cb1",
+   "name": "Classroom Building I",
+   "latitude": 28.6002,
+   "longitude": -81.1991,
+   "walk": {
+    "a-exit-1": 6.0,
+    "a-exit-2": 7.5,
+    "a-elev": 7.0,
+    "b-exit-1": 6.5,
+    "b-exit-2": 8.5,
+    "b-elev": 7.5,
+    "c-exit-1": 6.5,
+    "c-exit-2": 8.0,
+    "c-elev": 7.5,
+    "d-exit-1": 2.5,
+    "d-exit-2": 4.5,
+    "d-elev": 3.5
+   }
+  },
+  {
+   "id": "cb2",
+   "name": "Classroom Building II",
+   "latitude": 28.5998,
+   "longitude": -81.1986,
+   "walk": {
+    "a-exit-1": 7.0,
+    "a-exit-2": 8.5,
+    "a-elev": 7.5,
+    "b-exit-1": 7.5,
+    "b-exit-2": 9.5,
+    "b-elev": 8.5,
+    "c-exit-1": 7.0,
+    "c-exit-2": 9.0,
+    "c-elev": 8.0,
+    "d-exit-1": 1.5,
+    "d-exit-2": 3.5,
+    "d-elev": 2.5
+   }
+  },
+  {
+   "id": "arena",
+   "name": "Addition Financial Arena",
+   "latitude": 28.6071,
+   "longitude": -81.1972,
+   "walk": {
+    "a-exit-1": 15.0,
+    "a-exit-2": 17.0,
+    "a-elev": 16.0,
+    "b-exit-1": 10.5,
+    "b-exit-2": 12.0,
+    "b-elev": 11.0,
+    "c-exit-1": 7.0,
+    "c-exit-2": 5.0,
+    "c-elev": 6.0,
+    "d-exit-1": 14.0,
+    "d-exit-2": 15.5,
+    "d-elev": 14.5
+   }
+  },
+  {
+   "id": "millican",
+   "name": "Millican Hall",
+   "latitude": 28.5991,
+   "longitude": -81.2008,
+   "walk": {
+    "a-exit-1": 4.0,
+    "a-exit-2": 5.0,
+    "a-elev": 4.5,
+    "b-exit-1": 7.0,
+    "b-exit-2": 8.0,
+    "b-elev": 7.5,
+    "c-exit-1": 8.5,
+    "c-exit-2": 11.0,
+    "c-elev": 10.0,
+    "d-exit-1": 4.5,
+    "d-exit-2": 6.0,
+    "d-elev": 5.0
+   }
+  },
+  {
+   "id": "rec",
+   "name": "Recreation and Wellness Center",
+   "latitude": 28.5965,
+   "longitude": -81.1987,
+   "walk": {
+    "a-exit-1": 9.5,
+    "a-exit-2": 10.0,
+    "a-elev": 10.0,
+    "b-exit-1": 12.5,
+    "b-exit-2": 14.0,
+    "b-elev": 13.0,
+    "c-exit-1": 13.0,
+    "c-exit-2": 15.0,
+    "c-elev": 14.0,
+    "d-exit-1": 5.5,
+    "d-exit-2": 4.5,
+    "d-elev": 5.0
+   }
+  }
+ ],
+ "spots": [
+  {
+   "id": "a-1-01",
+   "garage": "a",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-1-02",
+   "garage": "a",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-1-03",
+   "garage": "a",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-1-04",
+   "garage": "a",
+   "floor": 1,
+   "type": "student",
+   "status": "OPEN",
+   "near": "a-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "a-1-05",
+   "garage": "a",
+   "floor": 1,
+   "type": "student",
+   "status": "OPEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-1-06",
+   "garage": "a",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-1-07",
+   "garage": "a",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-1-08",
+   "garage": "a",
+   "floor": 1,
+   "type": "student",
+   "status": "OPEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-1-09",
+   "garage": "a",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-1-10",
+   "garage": "a",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-1-11",
+   "garage": "a",
+   "floor": 1,
+   "type": "student",
+   "status": "OPEN",
+   "near": "a-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "a-1-12",
+   "garage": "a",
+   "floor": 1,
+   "type": "student",
+   "status": "OPEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-1-13",
+   "garage": "a",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-1-14",
+   "garage": "a",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-1-15",
+   "garage": "a",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-1-16",
+   "garage": "a",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-1-17",
+   "garage": "a",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-1-18",
+   "garage": "a",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "a-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "a-1-19",
+   "garage": "a",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-1-20",
+   "garage": "a",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-1-21",
+   "garage": "a",
+   "floor": 1,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-1-22",
+   "garage": "a",
+   "floor": 1,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-1-23",
+   "garage": "a",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-1-24",
+   "garage": "a",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-1-25",
+   "garage": "a",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "a-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "a-1-26",
+   "garage": "a",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-1-27",
+   "garage": "a",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-1-28",
+   "garage": "a",
+   "floor": 1,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-1-29",
+   "garage": "a",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-1-30",
+   "garage": "a",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-1-31",
+   "garage": "a",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-1-32",
+   "garage": "a",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "a-1-33",
+   "garage": "a",
+   "floor": 1,
+   "type": "student",
+   "status": "OPEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-1-34",
+   "garage": "a",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-1-35",
+   "garage": "a",
+   "floor": 1,
+   "type": "student",
+   "status": "OPEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-1-36",
+   "garage": "a",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-1-37",
+   "garage": "a",
+   "floor": 1,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "a-elev",
+   "narrow": false
+  },
+  {
+   "id": "a-1-38",
+   "garage": "a",
+   "floor": 1,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "a-elev",
+   "narrow": false
+  },
+  {
+   "id": "a-1-39",
+   "garage": "a",
+   "floor": 1,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "a-elev",
+   "narrow": false
+  },
+  {
+   "id": "a-1-40",
+   "garage": "a",
+   "floor": 1,
+   "type": "accessible",
+   "status": "OPEN",
+   "near": "a-elev",
+   "narrow": false
+  },
+  {
+   "id": "a-2-01",
+   "garage": "a",
+   "floor": 2,
+   "type": "student",
+   "status": "OPEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-2-02",
+   "garage": "a",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-2-03",
+   "garage": "a",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-2-04",
+   "garage": "a",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "a-2-05",
+   "garage": "a",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-2-06",
+   "garage": "a",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-2-07",
+   "garage": "a",
+   "floor": 2,
+   "type": "student",
+   "status": "OPEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-2-08",
+   "garage": "a",
+   "floor": 2,
+   "type": "student",
+   "status": "OPEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-2-09",
+   "garage": "a",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-2-10",
+   "garage": "a",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-2-11",
+   "garage": "a",
+   "floor": 2,
+   "type": "student",
+   "status": "OPEN",
+   "near": "a-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "a-2-12",
+   "garage": "a",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-2-13",
+   "garage": "a",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-2-14",
+   "garage": "a",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-2-15",
+   "garage": "a",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-2-16",
+   "garage": "a",
+   "floor": 2,
+   "type": "student",
+   "status": "OPEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-2-17",
+   "garage": "a",
+   "floor": 2,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-2-18",
+   "garage": "a",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "a-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "a-2-19",
+   "garage": "a",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-2-20",
+   "garage": "a",
+   "floor": 2,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-2-21",
+   "garage": "a",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-2-22",
+   "garage": "a",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-2-23",
+   "garage": "a",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-2-24",
+   "garage": "a",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-2-25",
+   "garage": "a",
+   "floor": 2,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "a-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "a-2-26",
+   "garage": "a",
+   "floor": 2,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-2-27",
+   "garage": "a",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-2-28",
+   "garage": "a",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-2-29",
+   "garage": "a",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-2-30",
+   "garage": "a",
+   "floor": 2,
+   "type": "student",
+   "status": "OPEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-2-31",
+   "garage": "a",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-2-32",
+   "garage": "a",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "a-2-33",
+   "garage": "a",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-2-34",
+   "garage": "a",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-2-35",
+   "garage": "a",
+   "floor": 2,
+   "type": "student",
+   "status": "OPEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-2-36",
+   "garage": "a",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-2-37",
+   "garage": "a",
+   "floor": 2,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "a-elev",
+   "narrow": false
+  },
+  {
+   "id": "a-2-38",
+   "garage": "a",
+   "floor": 2,
+   "type": "accessible",
+   "status": "OPEN",
+   "near": "a-elev",
+   "narrow": false
+  },
+  {
+   "id": "a-2-39",
+   "garage": "a",
+   "floor": 2,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "a-elev",
+   "narrow": false
+  },
+  {
+   "id": "a-2-40",
+   "garage": "a",
+   "floor": 2,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "a-elev",
+   "narrow": false
+  },
+  {
+   "id": "a-3-01",
+   "garage": "a",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-3-02",
+   "garage": "a",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-3-03",
+   "garage": "a",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-3-04",
+   "garage": "a",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "a-3-05",
+   "garage": "a",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-3-06",
+   "garage": "a",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-3-07",
+   "garage": "a",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-3-08",
+   "garage": "a",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-3-09",
+   "garage": "a",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-3-10",
+   "garage": "a",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-3-11",
+   "garage": "a",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "a-3-12",
+   "garage": "a",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-3-13",
+   "garage": "a",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-3-14",
+   "garage": "a",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-3-15",
+   "garage": "a",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-3-16",
+   "garage": "a",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-3-17",
+   "garage": "a",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-3-18",
+   "garage": "a",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "a-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "a-3-19",
+   "garage": "a",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-3-20",
+   "garage": "a",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-3-21",
+   "garage": "a",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-3-22",
+   "garage": "a",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-3-23",
+   "garage": "a",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-3-24",
+   "garage": "a",
+   "floor": 3,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-3-25",
+   "garage": "a",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "a-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "a-3-26",
+   "garage": "a",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-3-27",
+   "garage": "a",
+   "floor": 3,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-3-28",
+   "garage": "a",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "a-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "a-3-29",
+   "garage": "a",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-3-30",
+   "garage": "a",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-3-31",
+   "garage": "a",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-3-32",
+   "garage": "a",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "a-3-33",
+   "garage": "a",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-3-34",
+   "garage": "a",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-3-35",
+   "garage": "a",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-3-36",
+   "garage": "a",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "a-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "a-3-37",
+   "garage": "a",
+   "floor": 3,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "a-elev",
+   "narrow": false
+  },
+  {
+   "id": "a-3-38",
+   "garage": "a",
+   "floor": 3,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "a-elev",
+   "narrow": false
+  },
+  {
+   "id": "a-3-39",
+   "garage": "a",
+   "floor": 3,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "a-elev",
+   "narrow": false
+  },
+  {
+   "id": "a-3-40",
+   "garage": "a",
+   "floor": 3,
+   "type": "accessible",
+   "status": "OPEN",
+   "near": "a-elev",
+   "narrow": false
+  },
+  {
+   "id": "b-1-01",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-1-02",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-1-03",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-1-04",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "b-1-05",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-1-06",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-1-07",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "OPEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-1-08",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-1-09",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-1-10",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-1-11",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "b-1-12",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-1-13",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-1-14",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-1-15",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-1-16",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-1-17",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-1-18",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "b-1-19",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-1-20",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-1-21",
+   "garage": "b",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-1-22",
+   "garage": "b",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-1-23",
+   "garage": "b",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-1-24",
+   "garage": "b",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-1-25",
+   "garage": "b",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "b-1-26",
+   "garage": "b",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-1-27",
+   "garage": "b",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-1-28",
+   "garage": "b",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-1-29",
+   "garage": "b",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-1-30",
+   "garage": "b",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-1-31",
+   "garage": "b",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-1-32",
+   "garage": "b",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "b-1-33",
+   "garage": "b",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-1-34",
+   "garage": "b",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-1-35",
+   "garage": "b",
+   "floor": 1,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-1-36",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-1-37",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-1-38",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-1-39",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "b-1-40",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-1-41",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-1-42",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-1-43",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "OPEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-1-44",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-1-45",
+   "garage": "b",
+   "floor": 1,
+   "type": "student",
+   "status": "OPEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-1-46",
+   "garage": "b",
+   "floor": 1,
+   "type": "accessible",
+   "status": "OPEN",
+   "near": "b-elev",
+   "narrow": false
+  },
+  {
+   "id": "b-1-47",
+   "garage": "b",
+   "floor": 1,
+   "type": "accessible",
+   "status": "OPEN",
+   "near": "b-elev",
+   "narrow": false
+  },
+  {
+   "id": "b-1-48",
+   "garage": "b",
+   "floor": 1,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "b-elev",
+   "narrow": false
+  },
+  {
+   "id": "b-1-49",
+   "garage": "b",
+   "floor": 1,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "b-elev",
+   "narrow": false
+  },
+  {
+   "id": "b-1-50",
+   "garage": "b",
+   "floor": 1,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "b-elev",
+   "narrow": false
+  },
+  {
+   "id": "b-2-01",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-2-02",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-2-03",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-2-04",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "b-2-05",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-2-06",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-2-07",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-2-08",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-2-09",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-2-10",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "OPEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-2-11",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "OPEN",
+   "near": "b-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "b-2-12",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-2-13",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-2-14",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-2-15",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-2-16",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-2-17",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-2-18",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "b-2-19",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-2-20",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-2-21",
+   "garage": "b",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-2-22",
+   "garage": "b",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-2-23",
+   "garage": "b",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-2-24",
+   "garage": "b",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-2-25",
+   "garage": "b",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "b-2-26",
+   "garage": "b",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-2-27",
+   "garage": "b",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-2-28",
+   "garage": "b",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-2-29",
+   "garage": "b",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-2-30",
+   "garage": "b",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-2-31",
+   "garage": "b",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-2-32",
+   "garage": "b",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "b-2-33",
+   "garage": "b",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-2-34",
+   "garage": "b",
+   "floor": 2,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-2-35",
+   "garage": "b",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-2-36",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-2-37",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-2-38",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-2-39",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "b-2-40",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-2-41",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-2-42",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-2-43",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "OPEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-2-44",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-2-45",
+   "garage": "b",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-2-46",
+   "garage": "b",
+   "floor": 2,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "b-elev",
+   "narrow": false
+  },
+  {
+   "id": "b-2-47",
+   "garage": "b",
+   "floor": 2,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "b-elev",
+   "narrow": false
+  },
+  {
+   "id": "b-2-48",
+   "garage": "b",
+   "floor": 2,
+   "type": "accessible",
+   "status": "OPEN",
+   "near": "b-elev",
+   "narrow": false
+  },
+  {
+   "id": "b-2-49",
+   "garage": "b",
+   "floor": 2,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "b-elev",
+   "narrow": false
+  },
+  {
+   "id": "b-2-50",
+   "garage": "b",
+   "floor": 2,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "b-elev",
+   "narrow": false
+  },
+  {
+   "id": "b-3-01",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-3-02",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-3-03",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-3-04",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "b-3-05",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-3-06",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-3-07",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-3-08",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-3-09",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-3-10",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-3-11",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "b-3-12",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-3-13",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-3-14",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-3-15",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-3-16",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-3-17",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-3-18",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "b-3-19",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-3-20",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-3-21",
+   "garage": "b",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-3-22",
+   "garage": "b",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-3-23",
+   "garage": "b",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-3-24",
+   "garage": "b",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-3-25",
+   "garage": "b",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "b-3-26",
+   "garage": "b",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-3-27",
+   "garage": "b",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-3-28",
+   "garage": "b",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-3-29",
+   "garage": "b",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-3-30",
+   "garage": "b",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-3-31",
+   "garage": "b",
+   "floor": 3,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-3-32",
+   "garage": "b",
+   "floor": 3,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "b-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "b-3-33",
+   "garage": "b",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-3-34",
+   "garage": "b",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-3-35",
+   "garage": "b",
+   "floor": 3,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "b-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "b-3-36",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-3-37",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-3-38",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-3-39",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "b-3-40",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-3-41",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-3-42",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-3-43",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-3-44",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-3-45",
+   "garage": "b",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "b-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "b-3-46",
+   "garage": "b",
+   "floor": 3,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "b-elev",
+   "narrow": false
+  },
+  {
+   "id": "b-3-47",
+   "garage": "b",
+   "floor": 3,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "b-elev",
+   "narrow": false
+  },
+  {
+   "id": "b-3-48",
+   "garage": "b",
+   "floor": 3,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "b-elev",
+   "narrow": false
+  },
+  {
+   "id": "b-3-49",
+   "garage": "b",
+   "floor": 3,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "b-elev",
+   "narrow": false
+  },
+  {
+   "id": "b-3-50",
+   "garage": "b",
+   "floor": 3,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "b-elev",
+   "narrow": false
+  },
+  {
+   "id": "c-1-01",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-02",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-03",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-04",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "c-1-05",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-06",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-07",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-08",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-09",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-10",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-11",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "c-1-12",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-13",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-14",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-15",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-16",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-17",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-18",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "c-1-19",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-20",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-21",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-22",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-23",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-24",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-25",
+   "garage": "c",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "c-1-26",
+   "garage": "c",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-1-27",
+   "garage": "c",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-1-28",
+   "garage": "c",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-1-29",
+   "garage": "c",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-1-30",
+   "garage": "c",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-1-31",
+   "garage": "c",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-1-32",
+   "garage": "c",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "c-1-33",
+   "garage": "c",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-1-34",
+   "garage": "c",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-1-35",
+   "garage": "c",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-1-36",
+   "garage": "c",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-1-37",
+   "garage": "c",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-1-38",
+   "garage": "c",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-1-39",
+   "garage": "c",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "c-1-40",
+   "garage": "c",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-1-41",
+   "garage": "c",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-1-42",
+   "garage": "c",
+   "floor": 1,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-1-43",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "OPEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-44",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-45",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-46",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "c-1-47",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-48",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-49",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-50",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-51",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-52",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-53",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "c-1-54",
+   "garage": "c",
+   "floor": 1,
+   "type": "student",
+   "status": "OPEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-1-55",
+   "garage": "c",
+   "floor": 1,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "c-elev",
+   "narrow": false
+  },
+  {
+   "id": "c-1-56",
+   "garage": "c",
+   "floor": 1,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "c-elev",
+   "narrow": false
+  },
+  {
+   "id": "c-1-57",
+   "garage": "c",
+   "floor": 1,
+   "type": "accessible",
+   "status": "OPEN",
+   "near": "c-elev",
+   "narrow": false
+  },
+  {
+   "id": "c-1-58",
+   "garage": "c",
+   "floor": 1,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "c-elev",
+   "narrow": false
+  },
+  {
+   "id": "c-1-59",
+   "garage": "c",
+   "floor": 1,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "c-elev",
+   "narrow": false
+  },
+  {
+   "id": "c-1-60",
+   "garage": "c",
+   "floor": 1,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "c-elev",
+   "narrow": false
+  },
+  {
+   "id": "c-2-01",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-02",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-03",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-04",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "OPEN",
+   "near": "c-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "c-2-05",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-06",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-07",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-08",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-09",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "OPEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-10",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-11",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "c-2-12",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "OPEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-13",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-14",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-15",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-16",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-17",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-18",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "OPEN",
+   "near": "c-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "c-2-19",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-20",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "OPEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-21",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-22",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-23",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-24",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "OPEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-25",
+   "garage": "c",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "c-2-26",
+   "garage": "c",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-2-27",
+   "garage": "c",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-2-28",
+   "garage": "c",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-2-29",
+   "garage": "c",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-2-30",
+   "garage": "c",
+   "floor": 2,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-2-31",
+   "garage": "c",
+   "floor": 2,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-2-32",
+   "garage": "c",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "c-2-33",
+   "garage": "c",
+   "floor": 2,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-2-34",
+   "garage": "c",
+   "floor": 2,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-2-35",
+   "garage": "c",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-2-36",
+   "garage": "c",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-2-37",
+   "garage": "c",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-2-38",
+   "garage": "c",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-2-39",
+   "garage": "c",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "c-2-40",
+   "garage": "c",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-2-41",
+   "garage": "c",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-2-42",
+   "garage": "c",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-2-43",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "OPEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-44",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-45",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "OPEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-46",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "c-2-47",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-48",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-49",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-50",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-51",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-52",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-53",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "c-2-54",
+   "garage": "c",
+   "floor": 2,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-2-55",
+   "garage": "c",
+   "floor": 2,
+   "type": "accessible",
+   "status": "OPEN",
+   "near": "c-elev",
+   "narrow": false
+  },
+  {
+   "id": "c-2-56",
+   "garage": "c",
+   "floor": 2,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "c-elev",
+   "narrow": false
+  },
+  {
+   "id": "c-2-57",
+   "garage": "c",
+   "floor": 2,
+   "type": "accessible",
+   "status": "OPEN",
+   "near": "c-elev",
+   "narrow": false
+  },
+  {
+   "id": "c-2-58",
+   "garage": "c",
+   "floor": 2,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "c-elev",
+   "narrow": false
+  },
+  {
+   "id": "c-2-59",
+   "garage": "c",
+   "floor": 2,
+   "type": "accessible",
+   "status": "OPEN",
+   "near": "c-elev",
+   "narrow": false
+  },
+  {
+   "id": "c-2-60",
+   "garage": "c",
+   "floor": 2,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "c-elev",
+   "narrow": false
+  },
+  {
+   "id": "c-3-01",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-02",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-03",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-04",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "c-3-05",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-06",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-07",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-08",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-09",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-10",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-11",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "c-3-12",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-13",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-14",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-15",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-16",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-17",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-18",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "c-3-19",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-20",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-21",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-22",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-23",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-24",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-25",
+   "garage": "c",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "c-3-26",
+   "garage": "c",
+   "floor": 3,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-3-27",
+   "garage": "c",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-3-28",
+   "garage": "c",
+   "floor": 3,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-3-29",
+   "garage": "c",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-3-30",
+   "garage": "c",
+   "floor": 3,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-3-31",
+   "garage": "c",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-3-32",
+   "garage": "c",
+   "floor": 3,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "c-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "c-3-33",
+   "garage": "c",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-3-34",
+   "garage": "c",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-3-35",
+   "garage": "c",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-3-36",
+   "garage": "c",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-3-37",
+   "garage": "c",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-3-38",
+   "garage": "c",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-3-39",
+   "garage": "c",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "c-3-40",
+   "garage": "c",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-3-41",
+   "garage": "c",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-3-42",
+   "garage": "c",
+   "floor": 3,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "c-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "c-3-43",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-44",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-45",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-46",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "c-3-47",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-48",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-49",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-50",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-51",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-52",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "OPEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-53",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "c-3-54",
+   "garage": "c",
+   "floor": 3,
+   "type": "student",
+   "status": "TAKEN",
+   "near": "c-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "c-3-55",
+   "garage": "c",
+   "floor": 3,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "c-elev",
+   "narrow": false
+  },
+  {
+   "id": "c-3-56",
+   "garage": "c",
+   "floor": 3,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "c-elev",
+   "narrow": false
+  },
+  {
+   "id": "c-3-57",
+   "garage": "c",
+   "floor": 3,
+   "type": "accessible",
+   "status": "OPEN",
+   "near": "c-elev",
+   "narrow": false
+  },
+  {
+   "id": "c-3-58",
+   "garage": "c",
+   "floor": 3,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "c-elev",
+   "narrow": false
+  },
+  {
+   "id": "c-3-59",
+   "garage": "c",
+   "floor": 3,
+   "type": "accessible",
+   "status": "OPEN",
+   "near": "c-elev",
+   "narrow": false
+  },
+  {
+   "id": "c-3-60",
+   "garage": "c",
+   "floor": 3,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "c-elev",
+   "narrow": false
+  },
+  {
+   "id": "d-1-01",
+   "garage": "d",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-1-02",
+   "garage": "d",
+   "floor": 1,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-1-03",
+   "garage": "d",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-1-04",
+   "garage": "d",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "d-1-05",
+   "garage": "d",
+   "floor": 1,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-1-06",
+   "garage": "d",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-1-07",
+   "garage": "d",
+   "floor": 1,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-1-08",
+   "garage": "d",
+   "floor": 1,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-1-09",
+   "garage": "d",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-1-10",
+   "garage": "d",
+   "floor": 1,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-1-11",
+   "garage": "d",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "d-1-12",
+   "garage": "d",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "d-1-13",
+   "garage": "d",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "d-1-14",
+   "garage": "d",
+   "floor": 1,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "d-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "d-1-15",
+   "garage": "d",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "d-1-16",
+   "garage": "d",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "d-1-17",
+   "garage": "d",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "d-1-18",
+   "garage": "d",
+   "floor": 1,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "d-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "d-1-19",
+   "garage": "d",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-1-20",
+   "garage": "d",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-1-21",
+   "garage": "d",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-1-22",
+   "garage": "d",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-1-23",
+   "garage": "d",
+   "floor": 1,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-1-24",
+   "garage": "d",
+   "floor": 1,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "d-elev",
+   "narrow": false
+  },
+  {
+   "id": "d-1-25",
+   "garage": "d",
+   "floor": 1,
+   "type": "accessible",
+   "status": "OPEN",
+   "near": "d-elev",
+   "narrow": false
+  },
+  {
+   "id": "d-2-01",
+   "garage": "d",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-2-02",
+   "garage": "d",
+   "floor": 2,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-2-03",
+   "garage": "d",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-2-04",
+   "garage": "d",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "d-2-05",
+   "garage": "d",
+   "floor": 2,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-2-06",
+   "garage": "d",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-2-07",
+   "garage": "d",
+   "floor": 2,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-2-08",
+   "garage": "d",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-2-09",
+   "garage": "d",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-2-10",
+   "garage": "d",
+   "floor": 2,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-2-11",
+   "garage": "d",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "d-2-12",
+   "garage": "d",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "d-2-13",
+   "garage": "d",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "d-2-14",
+   "garage": "d",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "d-2-15",
+   "garage": "d",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "d-2-16",
+   "garage": "d",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "d-2-17",
+   "garage": "d",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "d-2-18",
+   "garage": "d",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "d-2-19",
+   "garage": "d",
+   "floor": 2,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-2-20",
+   "garage": "d",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-2-21",
+   "garage": "d",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-2-22",
+   "garage": "d",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-2-23",
+   "garage": "d",
+   "floor": 2,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-2-24",
+   "garage": "d",
+   "floor": 2,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "d-elev",
+   "narrow": false
+  },
+  {
+   "id": "d-2-25",
+   "garage": "d",
+   "floor": 2,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "d-elev",
+   "narrow": false
+  },
+  {
+   "id": "d-3-01",
+   "garage": "d",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-3-02",
+   "garage": "d",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-3-03",
+   "garage": "d",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-3-04",
+   "garage": "d",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "d-3-05",
+   "garage": "d",
+   "floor": 3,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-3-06",
+   "garage": "d",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-3-07",
+   "garage": "d",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-3-08",
+   "garage": "d",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-3-09",
+   "garage": "d",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-3-10",
+   "garage": "d",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-3-11",
+   "garage": "d",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "d-3-12",
+   "garage": "d",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "d-3-13",
+   "garage": "d",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "d-3-14",
+   "garage": "d",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "d-3-15",
+   "garage": "d",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "d-3-16",
+   "garage": "d",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "d-3-17",
+   "garage": "d",
+   "floor": 3,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "d-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "d-3-18",
+   "garage": "d",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "d-3-19",
+   "garage": "d",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-3-20",
+   "garage": "d",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-3-21",
+   "garage": "d",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-3-22",
+   "garage": "d",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-3-23",
+   "garage": "d",
+   "floor": 3,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-3-24",
+   "garage": "d",
+   "floor": 3,
+   "type": "accessible",
+   "status": "OPEN",
+   "near": "d-elev",
+   "narrow": false
+  },
+  {
+   "id": "d-3-25",
+   "garage": "d",
+   "floor": 3,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "d-elev",
+   "narrow": false
+  },
+  {
+   "id": "d-4-01",
+   "garage": "d",
+   "floor": 4,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-4-02",
+   "garage": "d",
+   "floor": 4,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-4-03",
+   "garage": "d",
+   "floor": 4,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-4-04",
+   "garage": "d",
+   "floor": 4,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": true
+  },
+  {
+   "id": "d-4-05",
+   "garage": "d",
+   "floor": 4,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-4-06",
+   "garage": "d",
+   "floor": 4,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-4-07",
+   "garage": "d",
+   "floor": 4,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-4-08",
+   "garage": "d",
+   "floor": 4,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-4-09",
+   "garage": "d",
+   "floor": 4,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-4-10",
+   "garage": "d",
+   "floor": 4,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-4-11",
+   "garage": "d",
+   "floor": 4,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "d-4-12",
+   "garage": "d",
+   "floor": 4,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "d-4-13",
+   "garage": "d",
+   "floor": 4,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "d-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "d-4-14",
+   "garage": "d",
+   "floor": 4,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "d-4-15",
+   "garage": "d",
+   "floor": 4,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "d-4-16",
+   "garage": "d",
+   "floor": 4,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "d-4-17",
+   "garage": "d",
+   "floor": 4,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "d-exit-1",
+   "narrow": false
+  },
+  {
+   "id": "d-4-18",
+   "garage": "d",
+   "floor": 4,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "d-exit-1",
+   "narrow": true
+  },
+  {
+   "id": "d-4-19",
+   "garage": "d",
+   "floor": 4,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-4-20",
+   "garage": "d",
+   "floor": 4,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-4-21",
+   "garage": "d",
+   "floor": 4,
+   "type": "employee",
+   "status": "OPEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-4-22",
+   "garage": "d",
+   "floor": 4,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-4-23",
+   "garage": "d",
+   "floor": 4,
+   "type": "employee",
+   "status": "TAKEN",
+   "near": "d-exit-2",
+   "narrow": false
+  },
+  {
+   "id": "d-4-24",
+   "garage": "d",
+   "floor": 4,
+   "type": "accessible",
+   "status": "TAKEN",
+   "near": "d-elev",
+   "narrow": false
+  },
+  {
+   "id": "d-4-25",
+   "garage": "d",
+   "floor": 4,
+   "type": "accessible",
+   "status": "OPEN",
+   "near": "d-elev",
+   "narrow": false
+  }
+ ]
+}

@@ -1,0 +1,9 @@
+body {
+  font-family: system-ui, sans-serif;
+  text-align: center;
+  margin-top: 4rem;
+}
+
+#count {
+  font-size: 4rem;
+}

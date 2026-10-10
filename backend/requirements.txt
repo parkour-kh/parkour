@@ -1,0 +1,8 @@
+flask
+flask-cors
+python-dotenv
+requests
+pyserial
+google-genai
+gunicorn
+# opencv-python   # only if you keep the camera/ track
