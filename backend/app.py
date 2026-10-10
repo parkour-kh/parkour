@@ -25,7 +25,7 @@ def protect_demo_api():
             and request.path.startswith("/api/garages/")
         ) or (
             request.method == "POST"
-            and request.path == "/api/recommend"
+            and request.path in ("/api/recommend", "/api/voice")
         )
 
         if request.path.startswith("/api/") and not allowed:
