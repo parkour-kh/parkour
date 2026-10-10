@@ -1,37 +1,28 @@
-from dotenv import load_dotenv
-from flask import Flask
- 
-load_dotenv()  # reads backend/.env (put GEMINI_API_KEY there; never commit it)
- 
-from routes import bp  # noqa: E402  (after load_dotenv so later modules see the env vars)
- 
-app = Flask(__name__, static_folder="dashboard", static_url_path="")
-app.register_blueprint(bp)
 import os
-from flask import jsonify, request
+from dotenv import load_dotenv
+from flask import Flask, jsonify, request
+
+load_dotenv()
+from routes import bp  # noqa: E402
+from voice import voice_bp  # noqa: E402
+
+app = Flask(__name__, static_folder='dashboard', static_url_path='')
+app.register_blueprint(bp)
+app.register_blueprint(voice_bp)
 
 @app.before_request
 def protect_demo_api():
-    if os.getenv("PARKOUR_PUBLIC_DEMO") == "1":
-        allowed = (
-            request.method == "GET"
-            and request.path in (
-                "/api/count",
-                "/api/destinations",
-                "/api/garages",
-            )
-        ) or (
-            request.method == "GET"
-            and request.path.startswith("/api/garages/")
-        ) or (
-            request.method == "POST"
-            and request.path == "/api/recommend"
-        )
+    if os.getenv('PARKOUR_PUBLIC_DEMO') != '1':
+        return None
+    allowed = (
+        (request.method == 'GET' and request.path in ('/api/count', '/api/destinations', '/api/garages'))
+        or (request.method == 'GET' and request.path.startswith('/api/garages/'))
+        or (request.method == 'POST' and request.path == '/api/recommend')
+        or (request.method == 'POST' and request.path == '/api/voice')
+    )
+    if request.path.startswith('/api/') and not allowed:
+        return jsonify(error='Unavailable in public demo mode'), 403
+    return None
 
-        if request.path.startswith("/api/") and not allowed:
-            return jsonify(error="Unavailable in public demo mode"), 403
- 
-if __name__ == "__main__":
-    # host="0.0.0.0" lets a phone/laptop on the same Wi-Fi reach the Pi. debug=True is for local dev only.
-    app.run(host="0.0.0.0", port=5000, debug=True)
- 
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=int(os.getenv('PORT', '5000')))
