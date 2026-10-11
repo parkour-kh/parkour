@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
+import { useParkourTheme } from "@/contexts/parkour-theme";
 
 type ParkingSpot = {
   garage: string;
@@ -23,11 +24,49 @@ const DEMO_SPOTS: ParkingSpot[] = [
   { garage: "Garage A", floor: "3", spot: "C12" },
 ];
 
+const LIGHT_COLORS = {
+  background: "#FAF8F3",
+  text: "#242424",
+  muted: "#77756F",
+  card: "#F3F0E8",
+  spotCard: "#FFFFFF",
+  selected: "#FFF9E8",
+  border: "#DED8C8",
+  detail: "#55534F",
+  green: "#344238",
+  gold: "#D4AF37",
+  buttonText: "#242424",
+  danger: "#C0392B",
+};
+
+const DARK_COLORS = {
+  background: "#101827",
+  text: "#FFFFFF",
+  muted: "#AAB4C4",
+  card: "#202B3C",
+  spotCard: "#202B3C",
+  selected: "#394151",
+  border: "#354358",
+  detail: "#E4E7EC",
+  green: "#E0C46E",
+  gold: "#D4AF37",
+  buttonText: "#242424",
+  danger: "#FF8E86",
+};
+
 export default function MySpotScreen() {
   const router = useRouter();
+  const { isDark } = useParkourTheme();
 
-  const [step, setStep] = useState<"start" | "confirm" | "saved">("start");
-  const [selectedSpot, setSelectedSpot] = useState<ParkingSpot | null>(null);
+  const COLORS = isDark ? DARK_COLORS : LIGHT_COLORS;
+  const styles = createStyles(COLORS);
+
+  const [step, setStep] = useState<"start" | "confirm" | "saved">(
+    "start"
+  );
+
+  const [selectedSpot, setSelectedSpot] =
+    useState<ParkingSpot | null>(null);
 
   useEffect(() => {
     async function loadSavedSpot() {
@@ -81,31 +120,48 @@ export default function MySpotScreen() {
     <ScrollView
       style={styles.container}
       contentContainerStyle={styles.content}
+      showsVerticalScrollIndicator={false}
     >
-      <TouchableOpacity onPress={() => router.back()}>
+      <TouchableOpacity
+        onPress={() => router.back()}
+        accessibilityRole="button"
+        accessibilityLabel="Go back"
+      >
         <Text style={styles.back}>← Back</Text>
       </TouchableOpacity>
 
+      {/* START SCREEN */}
       {step === "start" && (
         <>
           <Text style={styles.emoji}>🚗</Text>
-          <Text style={styles.title}>Already Parked?</Text>
+
+          <Text style={styles.title}>Find My Parking Spot</Text>
 
           <Text style={styles.subtitle}>
-            Find and save your parking spot without typing
-            in your garage, floor, or spot number.
+            Keep track of where you parked so it's easier
+            to find your car later.
           </Text>
 
           <View style={styles.card}>
             <Text style={styles.cardTitle}>How it works</Text>
-            <Text style={styles.info}>📍 Find your garage</Text>
-            <Text style={styles.info}>📷 Check occupied spots</Text>
-            <Text style={styles.info}>✓ Confirm where you parked</Text>
+
+            <Text style={styles.info}>
+              1. Find your garage
+            </Text>
+
+            <Text style={styles.info}>
+              2. Check occupied spots
+            </Text>
+
+            <Text style={styles.info}>
+              3. Confirm where you parked
+            </Text>
           </View>
 
           <TouchableOpacity
             style={styles.button}
             onPress={showDemoSpots}
+            accessibilityRole="button"
           >
             <Text style={styles.buttonText}>
               Try Parking Detection Demo
@@ -119,6 +175,7 @@ export default function MySpotScreen() {
         </>
       )}
 
+      {/* CONFIRM SCREEN */}
       {step === "confirm" && (
         <>
           <Text style={styles.title}>Confirm Your Spot</Text>
@@ -142,6 +199,8 @@ export default function MySpotScreen() {
                   isSelected && styles.selectedCard,
                 ]}
                 onPress={() => setSelectedSpot(item)}
+                accessibilityRole="button"
+                accessibilityState={{ selected: isSelected }}
               >
                 <Text style={styles.spotTitle}>
                   {item.garage}
@@ -161,36 +220,38 @@ export default function MySpotScreen() {
           <TouchableOpacity
             style={styles.button}
             onPress={confirmSpot}
+            accessibilityRole="button"
           >
             <Text style={styles.buttonText}>
               Yes, Save My Spot
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => setStep("start")}>
+          <TouchableOpacity
+            onPress={() => setStep("start")}
+            accessibilityRole="button"
+          >
             <Text style={styles.secondaryAction}>
-              ← Back to Start
+              ← Go Back
             </Text>
           </TouchableOpacity>
         </>
       )}
 
+      {/* SAVED SCREEN */}
       {step === "saved" && selectedSpot && (
         <>
-          <Text style={styles.emoji}>✅</Text>
-          <Text style={styles.title}>Parking Spot Saved!</Text>
+          <Text style={styles.emoji}>📍</Text>
+
+          <Text style={styles.title}>Your Saved Spot</Text>
 
           <Text style={styles.subtitle}>
-            Your parking location is saved on this device.
+            Your parking location has been saved.
           </Text>
 
           <View style={styles.card}>
             <Text style={styles.cardTitle}>
-              Your Parking Location
-            </Text>
-
-            <Text style={styles.savedDetail}>
-              🏢 {selectedSpot.garage}
+              ✓ {selectedSpot.garage}
             </Text>
 
             <Text style={styles.savedDetail}>
@@ -208,13 +269,17 @@ export default function MySpotScreen() {
               setSelectedSpot(null);
               setStep("start");
             }}
+            accessibilityRole="button"
           >
             <Text style={styles.buttonText}>
               Start New Parking Session
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={clearSpot}>
+          <TouchableOpacity
+            onPress={clearSpot}
+            accessibilityRole="button"
+          >
             <Text style={styles.deleteText}>
               Clear Saved Spot
             </Text>
@@ -225,119 +290,139 @@ export default function MySpotScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#FAF8F3",
-  },
-  content: {
-    padding: 24,
-    paddingTop: 55,
-    paddingBottom: 70,
-  },
-  back: {
-    fontSize: 17,
-    color: "#242424",
-    marginBottom: 45,
-  },
-  emoji: {
-    fontSize: 52,
-    textAlign: "center",
-    marginBottom: 18,
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: "800",
-    color: "#242424",
-    marginBottom: 12,
-  },
-  subtitle: {
-    fontSize: 16,
-    lineHeight: 25,
-    color: "#77756F",
-    marginBottom: 30,
-  },
-  card: {
-    backgroundColor: "#F3F0E8",
-    borderRadius: 18,
-    padding: 22,
-    marginBottom: 28,
-  },
-  cardTitle: {
-    fontSize: 19,
-    fontWeight: "700",
-    marginBottom: 18,
-    color: "#242424",
-  },
-  info: {
-    fontSize: 16,
-    marginBottom: 18,
-    color: "#344238",
-  },
-  button: {
-    backgroundColor: "#D4AF37",
-    padding: 20,
-    borderRadius: 15,
-    alignItems: "center",
-    marginTop: 10,
-  },
-  buttonText: {
-    fontSize: 17,
-    fontWeight: "700",
-    color: "#242424",
-    textAlign: "center",
-  },
-  note: {
-    fontSize: 13,
-    lineHeight: 20,
-    color: "#77756F",
-    textAlign: "center",
-    marginTop: 20,
-  },
-  spotCard: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 15,
-    borderWidth: 1,
-    borderColor: "#DED8C8",
-    padding: 20,
-    marginBottom: 14,
-  },
-  selectedCard: {
-    borderColor: "#D4AF37",
-    borderWidth: 2,
-    backgroundColor: "#FFF9E8",
-  },
-  spotTitle: {
-    fontSize: 19,
-    fontWeight: "700",
-    color: "#242424",
-  },
-  spotDetail: {
-    fontSize: 16,
-    color: "#55534F",
-    marginTop: 8,
-  },
-  selection: {
-    color: "#344238",
-    marginTop: 12,
-    fontWeight: "600",
-  },
-  savedDetail: {
-    fontSize: 18,
-    color: "#344238",
-    marginBottom: 18,
-  },
-  secondaryAction: {
-    textAlign: "center",
-    marginTop: 24,
-    fontSize: 16,
-    color: "#344238",
-  },
-  deleteText: {
-    textAlign: "center",
-    marginTop: 25,
-    color: "#C0392B",
-    fontSize: 16,
-  },
-});
+function createStyles(COLORS: typeof LIGHT_COLORS) {
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: COLORS.background,
+    },
 
+    content: {
+      padding: 24,
+      paddingTop: 55,
+      paddingBottom: 70,
+    },
+
+    back: {
+      fontSize: 17,
+      color: COLORS.text,
+      marginBottom: 45,
+    },
+
+    emoji: {
+      fontSize: 52,
+      textAlign: "center",
+      marginBottom: 18,
+    },
+
+    title: {
+      fontSize: 30,
+      fontWeight: "800",
+      color: COLORS.text,
+      marginBottom: 12,
+    },
+
+    subtitle: {
+      fontSize: 16,
+      lineHeight: 25,
+      color: COLORS.muted,
+      marginBottom: 30,
+    },
+
+    card: {
+      backgroundColor: COLORS.card,
+      borderRadius: 18,
+      padding: 22,
+      marginBottom: 28,
+    },
+
+    cardTitle: {
+      fontSize: 19,
+      fontWeight: "700",
+      marginBottom: 18,
+      color: COLORS.text,
+    },
+
+    info: {
+      fontSize: 16,
+      marginBottom: 18,
+      color: COLORS.green,
+    },
+
+    button: {
+      backgroundColor: COLORS.gold,
+      padding: 20,
+      borderRadius: 15,
+      alignItems: "center",
+      marginTop: 10,
+    },
+
+    buttonText: {
+      fontSize: 17,
+      fontWeight: "700",
+      color: COLORS.buttonText,
+      textAlign: "center",
+    },
+
+    note: {
+      fontSize: 13,
+      lineHeight: 20,
+      color: COLORS.muted,
+      textAlign: "center",
+      marginTop: 20,
+    },
+
+    spotCard: {
+      backgroundColor: COLORS.spotCard,
+      borderRadius: 15,
+      borderWidth: 1,
+      borderColor: COLORS.border,
+      padding: 20,
+      marginBottom: 14,
+    },
+
+    selectedCard: {
+      borderColor: COLORS.gold,
+      borderWidth: 2,
+      backgroundColor: COLORS.selected,
+    },
+
+    spotTitle: {
+      fontSize: 19,
+      fontWeight: "700",
+      color: COLORS.text,
+    },
+
+    spotDetail: {
+      fontSize: 16,
+      color: COLORS.detail,
+      marginTop: 8,
+    },
+
+    selection: {
+      color: COLORS.green,
+      marginTop: 12,
+      fontWeight: "600",
+    },
+
+    savedDetail: {
+      fontSize: 18,
+      color: COLORS.green,
+      marginBottom: 18,
+    },
+
+    secondaryAction: {
+      textAlign: "center",
+      marginTop: 24,
+      fontSize: 16,
+      color: COLORS.green,
+    },
+
+    deleteText: {
+      textAlign: "center",
+      marginTop: 25,
+      color: COLORS.danger,
+      fontSize: 16,
+    },
+  });
+}

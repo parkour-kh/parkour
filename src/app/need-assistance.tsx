@@ -211,11 +211,11 @@ export default function NeedAssistance() {
           </Text>
 
           <TouchableOpacity
-            style={styles.goldButton}
-            onPress={() => router.push("/voice-accessibility")}
-            accessibilityRole="button"
-            accessibilityLabel="Start ElevenLabs Voice Assistance"
-          >
+  style={styles.goldButton}
+  onPress={() => router.push("/voice-accessibility")}
+  accessibilityRole="button"
+  accessibilityLabel="Start ElevenLabs Voice Assistance"
+>
             <Ionicons
               name="mic-outline"
               size={20}

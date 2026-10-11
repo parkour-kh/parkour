@@ -1,22 +1,113 @@
-import GarageScreen from "./garage";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
+import { SafeAreaView } from "react-native-safe-area-context";
+import MapView, {
+  Marker,
+  PROVIDER_DEFAULT,
+} from "react-native-maps";
 import * as Location from "expo-location";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 
-import { DESTINATIONS, GARAGES, type Garage, type Permit } from "../../data/parking";
+import GarageScreen from "./garage";
+import {
+  DESTINATIONS,
+  GARAGES,
+  type Garage,
+  type Permit,
+} from "../../data/parking";
+import { useParkourTheme } from "@/contexts/parkour-theme";
+
+const LIGHT_COLORS = {
+  background: "#F8FAF8",
+  surface: "#FFFFFF",
+  text: "#242424",
+  muted: "#77756F",
+  border: "#E8E8E5",
+  green: "#344238",
+  gold: "#D4AF37",
+  card: "#F0F3F0",
+  selected: "#F4F1E5",
+  mapBackground: "#E6ECE8",
+  notice: "#F6F0DE",
+  noticeText: "#82661F",
+  recommendation: "#344238",
+  recommendationText: "#FFFFFF",
+  recommendationMuted: "#E2E8E2",
+  buttonText: "#242424",
+  detailButton: "#FFFFFF",
+  detailButtonText: "#344238",
+};
+
+const DARK_COLORS = {
+  background: "#101827",
+  surface: "#182335",
+  text: "#FFFFFF",
+  muted: "#AAB4C4",
+  border: "#354358",
+  green: "#D4AF37",
+  gold: "#D4AF37",
+  card: "#202B3C",
+  selected: "#394151",
+  mapBackground: "#182335",
+  notice: "#473B22",
+  noticeText: "#FFE29A",
+  recommendation: "#202B3C",
+  recommendationText: "#FFFFFF",
+  recommendationMuted: "#D1D9E6",
+  buttonText: "#242424",
+  detailButton: "#394151",
+  detailButtonText: "#FFFFFF",
+};
+
+const DARK_MAP_STYLE = [
+  {
+    elementType: "geometry",
+    stylers: [{ color: "#202B3C" }],
+  },
+  {
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#B8C3D3" }],
+  },
+  {
+    elementType: "labels.text.stroke",
+    stylers: [{ color: "#182335" }],
+  },
+  {
+    featureType: "road",
+    elementType: "geometry",
+    stylers: [{ color: "#354358" }],
+  },
+  {
+    featureType: "road",
+    elementType: "geometry.stroke",
+    stylers: [{ color: "#202B3C" }],
+  },
+  {
+    featureType: "water",
+    elementType: "geometry",
+    stylers: [{ color: "#111D30" }],
+  },
+  {
+    featureType: "poi.park",
+    elementType: "geometry",
+    stylers: [{ color: "#263D35" }],
+  },
+  {
+    featureType: "transit",
+    elementType: "geometry",
+    stylers: [{ color: "#283445" }],
+  },
+];
 
 function distanceMeters(
   lat1: number,
@@ -44,6 +135,10 @@ function distanceMeters(
 export default function ExploreScreen() {
   const router = useRouter();
   const mapRef = useRef<MapView>(null);
+  const { isDark } = useParkourTheme();
+
+  const COLORS = isDark ? DARK_COLORS : LIGHT_COLORS;
+  const styles = createStyles(COLORS);
 
   const params = useLocalSearchParams<{
     destination?: string;
@@ -61,6 +156,7 @@ export default function ExploreScreen() {
 
   const passedLatitude = Number(params.latitude);
   const passedLongitude = Number(params.longitude);
+
   const hasPassedCoordinates =
     typeof params.latitude === "string" &&
     typeof params.longitude === "string" &&
@@ -69,9 +165,10 @@ export default function ExploreScreen() {
 
   const destination = hasPassedCoordinates
     ? {
-        name: typeof params.destinationName === "string"
-          ? params.destinationName
-          : "Selected destination",
+        name:
+          typeof params.destinationName === "string"
+            ? params.destinationName
+            : "Selected destination",
         latitude: passedLatitude,
         longitude: passedLongitude,
       }
@@ -80,8 +177,10 @@ export default function ExploreScreen() {
   const [permit, setPermit] = useState<Permit>(
     params.permit === "Employee" ? "Employee" : "Student"
   );
+
   const [selectedGarageId, setSelectedGarageId] =
     useState<string | null>(null);
+
   const [simulateFull, setSimulateFull] = useState(false);
   const [showGarageDetails, setShowGarageDetails] = useState(false);
   const [hasLocationPermission, setHasLocationPermission] =
@@ -111,7 +210,12 @@ export default function ExploreScreen() {
         }
         return a.distance - b.distance;
       });
-  }, [destination.latitude, destination.longitude, permit, simulateFull]);
+  }, [
+    destination.latitude,
+    destination.longitude,
+    permit,
+    simulateFull,
+  ]);
 
   const bestGarage = rankedGarages.find(
     (garage) => garage.available > 0
@@ -183,6 +287,7 @@ export default function ExploreScreen() {
 
   function openDirections(garage: Garage) {
     focusGarage(garage);
+
     Alert.alert(
       "Garage located",
       "The garage is highlighted on Parkour's map. Turn-by-turn directions are not available yet."
@@ -201,21 +306,23 @@ export default function ExploreScreen() {
       <SafeAreaView style={styles.container}>
         <TouchableOpacity
           onPress={() => setShowGarageDetails(false)}
-          style={{
-            backgroundColor: "#344238",
-            padding: 16,
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 10,
-          }}
+          style={styles.detailsBack}
+          accessibilityRole="button"
         >
-          <Ionicons name="arrow-back" size={22} color="#FFFFFF" />
-          <Text style={{ color: "#FFFFFF", fontWeight: "700" }}>
+          <Ionicons
+            name="arrow-back"
+            size={22}
+            color={COLORS.recommendationText}
+          />
+          <Text style={styles.detailsBackText}>
             Back to recommendations
           </Text>
         </TouchableOpacity>
-        <View style={{ flex: 1 }}>
-          <GarageScreen garageName={selectedGarage?.name ?? "Garage A"} />
+
+        <View style={styles.flex}>
+          <GarageScreen
+            garageName={selectedGarage?.name ?? "Garage A"}
+          />
         </View>
       </SafeAreaView>
     );
@@ -223,16 +330,21 @@ export default function ExploreScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* HEADER */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity
+          onPress={() => router.back()}
+          accessibilityRole="button"
+          accessibilityLabel="Go back"
+        >
           <Ionicons
             name="arrow-back"
             size={24}
-            color="#242424"
+            color={COLORS.text}
           />
         </TouchableOpacity>
 
-        <View style={{ flex: 1 }}>
+        <View style={styles.flex}>
           <Text style={styles.headerTitle}>
             Explore parking
           </Text>
@@ -244,19 +356,22 @@ export default function ExploreScreen() {
         <TouchableOpacity
           onPress={showMyLocation}
           disabled={loadingLocation}
+          accessibilityRole="button"
+          accessibilityLabel="Show my location"
         >
           {loadingLocation ? (
-            <ActivityIndicator color="#344238" />
+            <ActivityIndicator color={COLORS.green} />
           ) : (
             <Ionicons
               name="locate-outline"
               size={25}
-              color="#344238"
+              color={COLORS.green}
             />
           )}
         </TouchableOpacity>
       </View>
 
+      {/* MAP */}
       <View style={styles.mapContainer}>
         <MapView
           ref={mapRef}
@@ -267,6 +382,7 @@ export default function ExploreScreen() {
           showsCompass
           showsScale
           showsBuildings
+          customMapStyle={isDark ? DARK_MAP_STYLE : []}
         >
           <Marker
             coordinate={{
@@ -274,7 +390,7 @@ export default function ExploreScreen() {
               longitude: destination.longitude,
             }}
             title={destination.name}
-            pinColor="#D4AF37"
+            pinColor={COLORS.gold}
           />
 
           {rankedGarages.map((garage) => (
@@ -294,8 +410,8 @@ export default function ExploreScreen() {
                 garage.available === 0
                   ? "#8B8B8B"
                   : garage.id === bestGarage?.id
-                  ? "#D4AF37"
-                  : "#39A86B"
+                    ? "#D4AF37"
+                    : "#39A86B"
               }
               onPress={() => setSelectedGarageId(garage.id)}
             />
@@ -315,15 +431,17 @@ export default function ExploreScreen() {
         </View>
       </View>
 
+      {/* RECOMMENDATIONS */}
       <ScrollView
         style={styles.bottomPanel}
         contentContainerStyle={styles.bottomContent}
+        showsVerticalScrollIndicator={false}
       >
         <View style={styles.demoBanner}>
           <Ionicons
             name="information-circle-outline"
             size={18}
-            color="#82661F"
+            color={COLORS.noticeText}
           />
           <Text style={styles.demoText}>
             Real map geography. Garage locations,
@@ -332,22 +450,22 @@ export default function ExploreScreen() {
         </View>
 
         <View style={styles.permitRow}>
-          {(["Student", "Employee"] as const).map(
-            (type) => (
-              <TouchableOpacity
-                key={type}
-                style={[
-                  styles.permitButton,
-                  permit === type && styles.permitSelected,
-                ]}
-                onPress={() => setPermit(type)}
-              >
-                <Text style={styles.permitText}>
-                  {type}
-                </Text>
-              </TouchableOpacity>
-            )
-          )}
+          {(["Student", "Employee"] as const).map((type) => (
+            <TouchableOpacity
+              key={type}
+              style={[
+                styles.permitButton,
+                permit === type && styles.permitSelected,
+              ]}
+              onPress={() => setPermit(type)}
+              accessibilityRole="button"
+              accessibilityState={{
+                selected: permit === type,
+              }}
+            >
+              <Text style={styles.permitText}>{type}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
 
         {selectedGarage ? (
@@ -379,11 +497,12 @@ export default function ExploreScreen() {
             <TouchableOpacity
               style={styles.directionsButton}
               onPress={() => openDirections(selectedGarage)}
+              accessibilityRole="button"
             >
               <Ionicons
                 name="navigate"
                 size={18}
-                color="#242424"
+                color={COLORS.buttonText}
               />
               <Text style={styles.directionsText}>
                 Get directions
@@ -392,15 +511,10 @@ export default function ExploreScreen() {
 
             <TouchableOpacity
               onPress={() => setShowGarageDetails(true)}
-              style={{
-                backgroundColor: "#FFFFFF",
-                borderRadius: 10,
-                padding: 14,
-                alignItems: "center",
-                marginTop: 10,
-              }}
+              style={styles.viewSpacesButton}
+              accessibilityRole="button"
             >
-              <Text style={{ color: "#344238", fontWeight: "800" }}>
+              <Text style={styles.viewSpacesText}>
                 View available parking spaces
               </Text>
             </TouchableOpacity>
@@ -420,17 +534,19 @@ export default function ExploreScreen() {
             key={garage.id}
             style={styles.garageRow}
             onPress={() => focusGarage(garage)}
+            accessibilityRole="button"
           >
             <Ionicons
               name="business-outline"
               size={22}
-              color="#344238"
+              color={COLORS.green}
             />
 
-            <View style={{ flex: 1 }}>
+            <View style={styles.flex}>
               <Text style={styles.garageName}>
                 {garage.name}
               </Text>
+
               <Text style={styles.garageMeta}>
                 {garage.available === 0
                   ? "Full"
@@ -441,7 +557,7 @@ export default function ExploreScreen() {
             <Ionicons
               name="chevron-forward"
               size={18}
-              color="#77756F"
+              color={COLORS.muted}
             />
           </TouchableOpacity>
         ))}
@@ -449,11 +565,12 @@ export default function ExploreScreen() {
         <TouchableOpacity
           style={styles.simulateButton}
           onPress={() => setSimulateFull(!simulateFull)}
+          accessibilityRole="button"
         >
           <Ionicons
             name="flask-outline"
             size={19}
-            color="#344238"
+            color={COLORS.green}
           />
           <Text style={styles.simulateText}>
             {simulateFull
@@ -473,187 +590,218 @@ export default function ExploreScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#F8FAF8",
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 15,
-    paddingHorizontal: 20,
-    paddingVertical: 14,
-    backgroundColor: "#FFFFFF",
-    borderBottomWidth: 1,
-    borderBottomColor: "#E8E8E5",
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: "800",
-    color: "#242424",
-  },
-  headerSubtitle: {
-    fontSize: 12,
-    color: "#77756F",
-    marginTop: 3,
-  },
-  mapContainer: {
-    height: "43%",
-    position: "relative",
-    backgroundColor: "#E6ECE8",
-  },
-  mapLegend: {
-    position: "absolute",
-    top: 12,
-    left: 12,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 10,
-    padding: 10,
-    gap: 4,
-  },
-  legendText: {
-    fontSize: 11,
-    color: "#242424",
-  },
-  bottomPanel: {
-    flex: 1,
-  },
-  bottomContent: {
-    padding: 18,
-    paddingBottom: 50,
-  },
-  demoBanner: {
-    flexDirection: "row",
-    gap: 9,
-    backgroundColor: "#F6F0DE",
-    padding: 12,
-    borderRadius: 12,
-    marginBottom: 15,
-  },
-  demoText: {
-    flex: 1,
-    fontSize: 12,
-    lineHeight: 18,
-    color: "#82661F",
-  },
-  permitRow: {
-    flexDirection: "row",
-    gap: 10,
-    marginBottom: 15,
-  },
-  permitButton: {
-    flex: 1,
-    padding: 12,
-    borderRadius: 10,
-    backgroundColor: "#F0F3F0",
-    borderWidth: 1,
-    borderColor: "#E1E7E1",
-    alignItems: "center",
-  },
-  permitSelected: {
-    borderColor: "#D4AF37",
-    backgroundColor: "#F4F1E5",
-    borderWidth: 2,
-  },
-  permitText: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#242424",
-  },
-  recommendationCard: {
-    backgroundColor: "#344238",
-    borderRadius: 16,
-    padding: 18,
-    marginBottom: 22,
-  },
-  recommendationHeader: {
-    marginBottom: 15,
-  },
-  recommendationLabel: {
-    fontSize: 11,
-    fontWeight: "800",
-    letterSpacing: 1,
-    color: "#D4AF37",
-    marginBottom: 10,
-  },
-  garageTitle: {
-    fontSize: 25,
-    fontWeight: "800",
-    color: "#FFFFFF",
-    marginBottom: 9,
-  },
-  garageDetails: {
-    fontSize: 13,
-    color: "#E2E8E2",
-    marginBottom: 5,
-  },
-  directionsButton: {
-    backgroundColor: "#D4AF37",
-    padding: 13,
-    borderRadius: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 8,
-  },
-  directionsText: {
-    fontSize: 14,
-    fontWeight: "700",
-    color: "#242424",
-  },
-  noGarages: {
-    fontSize: 14,
-    color: "#77756F",
-    paddingVertical: 20,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: "#242424",
-    marginBottom: 12,
-  },
-  garageRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    padding: 15,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 12,
-    marginBottom: 9,
-    borderWidth: 1,
-    borderColor: "#E8E8E5",
-  },
-  garageName: {
-    fontSize: 15,
-    fontWeight: "700",
-    color: "#242424",
-  },
-  garageMeta: {
-    fontSize: 12,
-    color: "#77756F",
-    marginTop: 4,
-  },
-  simulateButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 9,
-    borderWidth: 1,
-    borderColor: "#D4AF37",
-    borderRadius: 12,
-    padding: 15,
-    marginTop: 14,
-  },
-  simulateText: {
-    fontSize: 13,
-    fontWeight: "600",
-    color: "#344238",
-  },
-  disclaimer: {
-    fontSize: 11,
-    lineHeight: 18,
-    color: "#77756F",
-    marginTop: 18,
-  },
-});
+function createStyles(COLORS: typeof LIGHT_COLORS) {
+  return StyleSheet.create({
+    flex: {
+      flex: 1,
+    },
+    container: {
+      flex: 1,
+      backgroundColor: COLORS.background,
+    },
+    detailsBack: {
+      backgroundColor: COLORS.recommendation,
+      padding: 16,
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 10,
+    },
+    detailsBackText: {
+      color: COLORS.recommendationText,
+      fontWeight: "700",
+    },
+    header: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 15,
+      paddingHorizontal: 20,
+      paddingVertical: 14,
+      backgroundColor: COLORS.surface,
+      borderBottomWidth: 1,
+      borderBottomColor: COLORS.border,
+    },
+    headerTitle: {
+      fontSize: 18,
+      fontWeight: "800",
+      color: COLORS.text,
+    },
+    headerSubtitle: {
+      fontSize: 12,
+      color: COLORS.muted,
+      marginTop: 3,
+    },
+    mapContainer: {
+      height: "43%",
+      position: "relative",
+      backgroundColor: COLORS.mapBackground,
+    },
+    mapLegend: {
+      position: "absolute",
+      top: 12,
+      left: 12,
+      backgroundColor: COLORS.surface,
+      borderRadius: 10,
+      padding: 10,
+      gap: 4,
+      borderWidth: 1,
+      borderColor: COLORS.border,
+    },
+    legendText: {
+      fontSize: 11,
+      color: COLORS.text,
+    },
+    bottomPanel: {
+      flex: 1,
+    },
+    bottomContent: {
+      padding: 18,
+      paddingBottom: 50,
+    },
+    demoBanner: {
+      flexDirection: "row",
+      gap: 9,
+      backgroundColor: COLORS.notice,
+      padding: 12,
+      borderRadius: 12,
+      marginBottom: 15,
+    },
+    demoText: {
+      flex: 1,
+      fontSize: 12,
+      lineHeight: 18,
+      color: COLORS.noticeText,
+    },
+    permitRow: {
+      flexDirection: "row",
+      gap: 10,
+      marginBottom: 15,
+    },
+    permitButton: {
+      flex: 1,
+      padding: 12,
+      borderRadius: 10,
+      backgroundColor: COLORS.card,
+      borderWidth: 1,
+      borderColor: COLORS.border,
+      alignItems: "center",
+    },
+    permitSelected: {
+      borderColor: COLORS.gold,
+      backgroundColor: COLORS.selected,
+      borderWidth: 2,
+    },
+    permitText: {
+      fontSize: 14,
+      fontWeight: "600",
+      color: COLORS.text,
+    },
+    recommendationCard: {
+      backgroundColor: COLORS.recommendation,
+      borderRadius: 16,
+      padding: 18,
+      marginBottom: 22,
+      borderWidth: 1,
+      borderColor: COLORS.border,
+    },
+    recommendationHeader: {
+      marginBottom: 15,
+    },
+    recommendationLabel: {
+      fontSize: 11,
+      fontWeight: "800",
+      letterSpacing: 1,
+      color: COLORS.gold,
+      marginBottom: 10,
+    },
+    garageTitle: {
+      fontSize: 25,
+      fontWeight: "800",
+      color: COLORS.recommendationText,
+      marginBottom: 9,
+    },
+    garageDetails: {
+      fontSize: 13,
+      color: COLORS.recommendationMuted,
+      marginBottom: 5,
+    },
+    directionsButton: {
+      backgroundColor: COLORS.gold,
+      padding: 13,
+      borderRadius: 10,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 8,
+    },
+    directionsText: {
+      fontSize: 14,
+      fontWeight: "700",
+      color: COLORS.buttonText,
+    },
+    viewSpacesButton: {
+      backgroundColor: COLORS.detailButton,
+      borderRadius: 10,
+      padding: 14,
+      alignItems: "center",
+      marginTop: 10,
+    },
+    viewSpacesText: {
+      color: COLORS.detailButtonText,
+      fontWeight: "800",
+    },
+    noGarages: {
+      fontSize: 14,
+      color: COLORS.muted,
+      paddingVertical: 20,
+    },
+    sectionTitle: {
+      fontSize: 18,
+      fontWeight: "700",
+      color: COLORS.text,
+      marginBottom: 12,
+    },
+    garageRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 12,
+      padding: 15,
+      backgroundColor: COLORS.surface,
+      borderRadius: 12,
+      marginBottom: 9,
+      borderWidth: 1,
+      borderColor: COLORS.border,
+    },
+    garageName: {
+      fontSize: 15,
+      fontWeight: "700",
+      color: COLORS.text,
+    },
+    garageMeta: {
+      fontSize: 12,
+      color: COLORS.muted,
+      marginTop: 4,
+    },
+    simulateButton: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 9,
+      borderWidth: 1,
+      borderColor: COLORS.gold,
+      borderRadius: 12,
+      padding: 15,
+      marginTop: 14,
+    },
+    simulateText: {
+      fontSize: 13,
+      fontWeight: "600",
+      color: COLORS.green,
+    },
+    disclaimer: {
+      fontSize: 11,
+      lineHeight: 18,
+      color: COLORS.muted,
+      marginTop: 18,
+    },
+  });
+}
