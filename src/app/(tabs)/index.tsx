@@ -109,16 +109,7 @@ export default function HomeScreen() {
             see available spots near you.
           </Text>
 
-          <TouchableOpacity
-            style={styles.heroArrow}
-            onPress={() => Alert.alert("Search for a destination", "Type a location into the Google-powered search bar below and choose a suggestion.")}
-          >
-            <Ionicons
-              name="arrow-forward"
-              size={22}
-              color={COLORS.text}
-            />
-          </TouchableOpacity>
+          
         </ImageBackground>
 
         {/* DESTINATION SEARCH */}

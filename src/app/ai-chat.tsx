@@ -97,12 +97,15 @@ export default function AIChat() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_URL}/api/assistant/chat`, {
-        method: "POST",
+const response = await fetch(`${API_URL}/api/chat`, {
+          method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message: question }),
+        body: JSON.stringify({
+  message: question,
+  user_type: "student",
+}),
       });
 
       const data = await response.json();
