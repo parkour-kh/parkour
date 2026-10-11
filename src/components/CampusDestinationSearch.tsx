@@ -25,7 +25,7 @@ type Prediction = {
   address: string;
 };
 
-const API_URL = process.env.EXPO_PUBLIC_API_URL ?? "";
+   const API_URL = process.env.EXPO_PUBLIC_API_URL ?? "https://parkour-api-7u2b.onrender.com";
 
 const destinations: SelectedPlace[] = [
   {
