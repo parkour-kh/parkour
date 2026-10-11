@@ -7,10 +7,13 @@ import {
   ScrollView,
   StyleSheet,
   Alert,
+  TextInput,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import { useParkourTheme } from "@/contexts/parkour-theme";
+import { getGarage } from "../api";
+import { GARAGES } from "../data/parking";
 
 type ParkingSpot = {
   garage: string;
@@ -18,11 +21,6 @@ type ParkingSpot = {
   spot: string;
 };
 
-const DEMO_SPOTS: ParkingSpot[] = [
-  { garage: "Garage A", floor: "2", spot: "B24" },
-  { garage: "Garage A", floor: "2", spot: "B25" },
-  { garage: "Garage A", floor: "3", spot: "C12" },
-];
 
 const LIGHT_COLORS = {
   background: "#FAF8F3",
@@ -65,6 +63,13 @@ export default function MySpotScreen() {
     "start"
   );
 
+  const [parkingSpots, setParkingSpots] = useState<ParkingSpot[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [garageId, setGarageId] = useState("a");
+  const [manualFloor, setManualFloor] = useState("");
+  const [manualSpot, setManualSpot] = useState("");
+
   const [selectedSpot, setSelectedSpot] =
     useState<ParkingSpot | null>(null);
 
@@ -86,9 +91,43 @@ export default function MySpotScreen() {
     void loadSavedSpot();
   }, []);
 
-  function showDemoSpots() {
-    setSelectedSpot(DEMO_SPOTS[0]);
-    setStep("confirm");
+  async function loadOccupiedSpots(id = garageId) {
+    setLoading(true);
+    setLoadError(null);
+    try {
+      const data = await getGarage(id);
+      const garageName = GARAGES.find((g) => g.id === id)?.name ?? data.garage;
+      const occupied = data.floors.flatMap((floor) =>
+        floor.spots.filter((spot) => spot.status === "TAKEN").map((spot) => ({
+          garage: garageName,
+          floor: String(floor.floor),
+          spot: spot.id,
+        }))
+      );
+      setParkingSpots(occupied);
+      setSelectedSpot(null);
+      setStep("confirm");
+    } catch {
+      setLoadError("Could not connect to the parking backend. Check your server and try again.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function saveManualSpot() {
+    if (!manualFloor.trim() || !manualSpot.trim()) {
+      Alert.alert("Missing details", "Enter your floor and spot number.");
+      return;
+    }
+    const garageName = GARAGES.find((g) => g.id === garageId)?.name ?? `Garage ${garageId.toUpperCase()}`;
+    const spot = { garage: garageName, floor: manualFloor.trim(), spot: manualSpot.trim() };
+    try {
+      await AsyncStorage.setItem("myParkingSpot", JSON.stringify(spot));
+      setSelectedSpot(spot);
+      setStep("saved");
+    } catch {
+      Alert.alert("Error", "Could not save your parking spot.");
+    }
   }
 
   async function confirmSpot() {
@@ -158,19 +197,61 @@ export default function MySpotScreen() {
             </Text>
           </View>
 
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>Choose a garage</Text>
+            {GARAGES.map((garage) => (
+              <TouchableOpacity
+                key={garage.id}
+                accessibilityRole="button"
+                accessibilityState={{ selected: garageId === garage.id }}
+                onPress={() => setGarageId(garage.id)}
+                style={styles.spotCard}
+              >
+                <Text style={styles.spotTitle}>
+                  {garageId === garage.id ? "✓ " : ""}{garage.name}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+          {loadError && <Text style={styles.deleteText}>{loadError}</Text>}
           <TouchableOpacity
+            disabled={loading}
             style={styles.button}
-            onPress={showDemoSpots}
+            onPress={() => void loadOccupiedSpots()}
             accessibilityRole="button"
           >
             <Text style={styles.buttonText}>
-              Try Parking Detection Demo
+              {loading ? "Loading occupied spots..." : "Check occupied parking spots"}
             </Text>
           </TouchableOpacity>
 
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>Or enter your spot manually</Text>
+            <Text style={styles.spotDetail}>You can always save your location, even if the live parking connection is unavailable.</Text>
+            <TextInput
+              style={styles.manualInput}
+              placeholder="Floor (e.g. 2)"
+              placeholderTextColor={COLORS.muted}
+              value={manualFloor}
+              onChangeText={setManualFloor}
+              accessibilityLabel="Parking floor"
+            />
+            <TextInput
+              style={styles.manualInput}
+              placeholder="Spot (e.g. 14)"
+              placeholderTextColor={COLORS.muted}
+              value={manualSpot}
+              onChangeText={setManualSpot}
+              accessibilityLabel="Parking spot number"
+            />
+            <TouchableOpacity style={styles.button} onPress={() => void saveManualSpot()} accessibilityRole="button">
+              <Text style={styles.buttonText}>Save My Spot Manually</Text>
+            </TouchableOpacity>
+          </View>
+
           <Text style={styles.note}>
-            Demo mode: The next screen uses sample parking
-            spots. Live camera detection is not connected yet.
+            Uses the same parking backend as the Search & Park garage details.
+            Availability may be simulated; confirm your actual location before saving.
           </Text>
         </>
       )}
@@ -181,11 +262,11 @@ export default function MySpotScreen() {
           <Text style={styles.title}>Confirm Your Spot</Text>
 
           <Text style={styles.subtitle}>
-            Choose your parking location from these demo
-            examples. Nothing is saved until you confirm.
+            These occupied spaces come from the parking backend.
+            Select your actual space; nothing is saved until you confirm.
           </Text>
 
-          {DEMO_SPOTS.map((item, index) => {
+          {parkingSpots.map((item, index) => {
             const isSelected =
               selectedSpot?.garage === item.garage &&
               selectedSpot?.floor === item.floor &&
@@ -207,7 +288,7 @@ export default function MySpotScreen() {
                 </Text>
 
                 <Text style={styles.spotDetail}>
-                  Floor {item.floor} · Spot {item.spot}
+                  Floor {item.floor} · Spot {item.spot.split("-").pop() ?? item.spot}
                 </Text>
 
                 <Text style={styles.selection}>
@@ -217,9 +298,14 @@ export default function MySpotScreen() {
             );
           })}
 
+          {parkingSpots.length === 0 && (
+            <Text style={styles.note}>No occupied spots were reported for this garage.</Text>
+          )}
           <TouchableOpacity
             style={styles.button}
             onPress={confirmSpot}
+            disabled={!selectedSpot}
+            accessibilityState={{ disabled: !selectedSpot }}
             accessibilityRole="button"
           >
             <Text style={styles.buttonText}>
@@ -265,10 +351,7 @@ export default function MySpotScreen() {
 
           <TouchableOpacity
             style={styles.button}
-            onPress={() => {
-              setSelectedSpot(null);
-              setStep("start");
-            }}
+            onPress={() => void clearSpot()}
             accessibilityRole="button"
           >
             <Text style={styles.buttonText}>
@@ -370,6 +453,17 @@ function createStyles(COLORS: typeof LIGHT_COLORS) {
       color: COLORS.muted,
       textAlign: "center",
       marginTop: 20,
+    },
+
+    manualInput: {
+      borderWidth: 1,
+      borderColor: COLORS.border,
+      backgroundColor: COLORS.spotCard,
+      color: COLORS.text,
+      padding: 14,
+      borderRadius: 12,
+      marginTop: 12,
+      fontSize: 16,
     },
 
     spotCard: {
