@@ -125,3 +125,37 @@ def explain(message, result):
     except Exception as e:
         print("Gemini explain failed, using template:", e)
         return template_reply(result), False
+
+# ---------------- 3. general parking questions ----------------
+def answer_general(message):
+    """Answer parking questions that don't require a destination."""
+    prompt = (
+        "You are Parkour AI, a helpful parking assistant for "
+        "the University of Central Florida (UCF).\n"
+        "Answer the student's parking question clearly, "
+        "concisely, and in a friendly tone.\n"
+        "You can help with visitor parking, permits, accessibility, "
+        "parking rules, tickets, and general campus parking guidance.\n"
+        "Do not invent specific prices, permit permissions, "
+        "parking locations, opening hours, or live availability.\n"
+        "You do not have live web access or verified current UCF "
+        "parking policy information in this request.\n"
+        "When specific current rules are needed, direct the user "
+        "to UCF Parking and Transportation Services at "
+        "https://parking.ucf.edu/.\n"
+        "Do not ask for a destination unless the student is "
+        "specifically requesting a nearby garage or route.\n"
+        "Keep the answer to 2-4 sentences.\n"
+        f"Student question: {json.dumps(message)}"
+    )
+
+    try:
+        return _generate(prompt).strip(), True
+    except Exception as e:
+        print("General Gemini question failed:", e)
+        return (
+            "I can help with general UCF parking questions, "
+            "but I can't verify the latest parking rules right now. "
+            "For visitor parking, permits, and current regulations, "
+            "check https://parking.ucf.edu/."
+        ), False

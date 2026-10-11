@@ -234,10 +234,18 @@ def chat():
 
     data = store.snapshot()
     dest_id, parsed_by_ai = gemini_client.parse_destination(message, data["destinations"])
+
+
     if dest_id is None:
-        names = ", ".join(d["name"] for d in data["destinations"])
-        return jsonify(destination=None, recommendation=None, ai_used=parsed_by_ai,
-                       reply=f"I couldn't tell which building you're headed to. I know: {names}.")
+        reply, answered_by_ai = gemini_client.answer_general(message)
+
+        return jsonify(
+            destination=None,
+            recommendation=None,
+            ai_used=answered_by_ai,
+            reply=reply
+        )
+
 
     result = recommend(data, dest_id, user_type,
                        accessible=bool(b.get("accessible", False)),
