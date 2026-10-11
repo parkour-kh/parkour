@@ -3,23 +3,35 @@ import React from "react";
 import {
   Alert,
   Linking,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { useParkourTheme } from "@/contexts/parkour-theme";
 
-const COLORS = {
+const LIGHT_COLORS = {
   background: "#F8FAF8",
-  green: "#344238",
+  text: "#344238",
   gold: "#D4AF37",
-  white: "#FFFFFF",
+  card: "#FFFFFF",
   muted: "#77756F",
   border: "#E1E7E1",
+  notice: "#F0EBE2",
+};
+
+const DARK_COLORS = {
+  background: "#101827",
+  text: "#FFFFFF",
+  gold: "#D4AF37",
+  card: "#202B3C",
+  muted: "#AAB4C4",
+  border: "#354358",
+  notice: "#283445",
 };
 
 const resources = [
@@ -48,6 +60,10 @@ const resources = [
 
 export default function EssentialsScreen() {
   const router = useRouter();
+  const { isDark } = useParkourTheme();
+
+  const COLORS = isDark ? DARK_COLORS : LIGHT_COLORS;
+  const styles = createStyles(COLORS);
 
   async function openResource(url: string) {
     try {
@@ -62,15 +78,24 @@ export default function EssentialsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.content}>
-        <TouchableOpacity onPress={() => router.back()}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* BACK BUTTON */}
+        <TouchableOpacity
+          onPress={() => router.back()}
+          accessibilityRole="button"
+          accessibilityLabel="Go back"
+        >
           <Ionicons
             name="arrow-back"
             size={26}
-            color={COLORS.green}
+            color={COLORS.text}
           />
         </TouchableOpacity>
 
+        {/* HEADER */}
         <Text style={styles.title}>
           Parking essentials
         </Text>
@@ -80,11 +105,14 @@ export default function EssentialsScreen() {
           at UCF.
         </Text>
 
+        {/* RESOURCE CARDS */}
         {resources.map((resource) => (
           <TouchableOpacity
             key={resource.title}
             style={styles.card}
             onPress={() => openResource(resource.url)}
+            accessibilityRole="link"
+            accessibilityLabel={resource.title}
           >
             <View style={styles.row}>
               <Ionicons
@@ -92,6 +120,7 @@ export default function EssentialsScreen() {
                 size={28}
                 color={COLORS.gold}
               />
+
               <Ionicons
                 name="open-outline"
                 size={20}
@@ -109,12 +138,14 @@ export default function EssentialsScreen() {
           </TouchableOpacity>
         ))}
 
+        {/* INFORMATION NOTICE */}
         <View style={styles.notice}>
           <Ionicons
             name="information-circle-outline"
             size={22}
             color={COLORS.gold}
           />
+
           <Text style={styles.description}>
             Always follow posted signs and official UCF
             parking regulations. Rules and permit
@@ -126,55 +157,65 @@ export default function EssentialsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  content: {
-    padding: 24,
-    gap: 18,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "700",
-    color: COLORS.green,
-  },
-  subtitle: {
-    fontSize: 15,
-    lineHeight: 23,
-    color: COLORS.muted,
-    marginBottom: 8,
-  },
-  card: {
-    backgroundColor: COLORS.white,
-    padding: 22,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    gap: 12,
-  },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  heading: {
-    fontSize: 19,
-    fontWeight: "700",
-    color: COLORS.green,
-  },
-  description: {
-    fontSize: 14,
-    lineHeight: 22,
-    color: COLORS.muted,
-    flexShrink: 1,
-  },
-  notice: {
-    backgroundColor: "#F0EBE2",
-    borderRadius: 12,
-    padding: 18,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-  },
-});
+function createStyles(COLORS: typeof LIGHT_COLORS) {
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: COLORS.background,
+    },
+
+    content: {
+      padding: 24,
+      gap: 18,
+    },
+
+    title: {
+      fontSize: 28,
+      fontWeight: "700",
+      color: COLORS.text,
+    },
+
+    subtitle: {
+      fontSize: 15,
+      lineHeight: 23,
+      color: COLORS.muted,
+      marginBottom: 8,
+    },
+
+    card: {
+      backgroundColor: COLORS.card,
+      padding: 22,
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: COLORS.border,
+      gap: 12,
+    },
+
+    row: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+    },
+
+    heading: {
+      fontSize: 19,
+      fontWeight: "700",
+      color: COLORS.text,
+    },
+
+    description: {
+      fontSize: 14,
+      lineHeight: 22,
+      color: COLORS.muted,
+      flexShrink: 1,
+    },
+
+    notice: {
+      backgroundColor: COLORS.notice,
+      borderRadius: 12,
+      padding: 18,
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 12,
+    },
+  });
+}

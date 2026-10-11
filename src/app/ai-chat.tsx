@@ -14,8 +14,9 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useParkourTheme } from "@/contexts/parkour-theme";
 
-const COLORS = {
+const LIGHT_COLORS = {
   background: "#F8FAF8",
   text: "#242424",
   muted: "#77756F",
@@ -24,6 +25,29 @@ const COLORS = {
   green: "#344238",
   white: "#FFFFFF",
   border: "#E1E7E1",
+  avatar: "#E8EEE8",
+  userBubble: "#344238",
+  userText: "#FFFFFF",
+  inputArea: "#FFFFFF",
+  input: "#F8FAF8",
+  sendText: "#242424",
+};
+
+const DARK_COLORS = {
+  background: "#101827",
+  text: "#FFFFFF",
+  muted: "#AAB4C4",
+  gold: "#D4AF37",
+  card: "#202B3C",
+  green: "#D4AF37",
+  white: "#FFFFFF",
+  border: "#354358",
+  avatar: "#354358",
+  userBubble: "#394C42",
+  userText: "#FFFFFF",
+  inputArea: "#182335",
+  input: "#202B3C",
+  sendText: "#242424",
 };
 
 const API_URL =
@@ -39,6 +63,10 @@ type Message = {
 export default function AIChat() {
   const router = useRouter();
   const scrollRef = useRef<ScrollView>(null);
+  const { isDark } = useParkourTheme();
+
+  const COLORS = isDark ? DARK_COLORS : LIGHT_COLORS;
+  const styles = createStyles(COLORS);
 
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -215,6 +243,7 @@ export default function AIChat() {
             style={styles.input}
             placeholder="Ask about UCF parking..."
             placeholderTextColor={COLORS.muted}
+            selectionColor={COLORS.gold}
             value={input}
             onChangeText={setInput}
             multiline
@@ -236,7 +265,7 @@ export default function AIChat() {
             <Ionicons
               name="send"
               size={20}
-              color={COLORS.text}
+              color={COLORS.sendText}
             />
           </TouchableOpacity>
         </View>
@@ -250,146 +279,172 @@ export default function AIChat() {
   );
 }
 
-const styles = StyleSheet.create({
-  flex: {
-    flex: 1,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
-    gap: 14,
-  },
-  headerText: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "800",
-    color: COLORS.text,
-  },
-  subtitle: {
-    fontSize: 12,
-    color: COLORS.muted,
-    marginTop: 3,
-  },
-  aiIcon: {
-    width: 42,
-    height: 42,
-    borderRadius: 13,
-    backgroundColor: COLORS.card,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  chatArea: {
-    flex: 1,
-  },
-  messages: {
-    padding: 17,
-    paddingBottom: 25,
-    gap: 17,
-  },
-  messageRow: {
-    flexDirection: "row",
-    alignItems: "flex-end",
-    gap: 8,
-  },
-  userRow: {
-    justifyContent: "flex-end",
-  },
-  assistantRow: {
-    justifyContent: "flex-start",
-  },
-  avatar: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: "#E8EEE8",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  bubble: {
-    maxWidth: "82%",
-    borderRadius: 17,
-    paddingHorizontal: 15,
-    paddingVertical: 12,
-  },
-  userBubble: {
-    backgroundColor: COLORS.green,
-    borderBottomRightRadius: 5,
-  },
-  assistantBubble: {
-    backgroundColor: COLORS.card,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    borderBottomLeftRadius: 5,
-  },
-  messageText: {
-    fontSize: 14,
-    lineHeight: 21,
-    color: COLORS.text,
-  },
-  userMessageText: {
-    color: COLORS.white,
-  },
-  loadingRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    paddingLeft: 40,
-  },
-  loadingText: {
-    fontSize: 13,
-    color: COLORS.muted,
-  },
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "flex-end",
-    gap: 10,
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 8,
-    borderTopWidth: 1,
-    borderTopColor: COLORS.border,
-    backgroundColor: COLORS.white,
-  },
-  input: {
-    flex: 1,
-    minHeight: 46,
-    maxHeight: 110,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    borderRadius: 15,
-    paddingHorizontal: 14,
-    paddingVertical: 11,
-    color: COLORS.text,
-    backgroundColor: COLORS.background,
-    fontSize: 14,
-  },
-  sendButton: {
-    backgroundColor: COLORS.gold,
-    width: 46,
-    height: 46,
-    borderRadius: 14,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  disabledButton: {
-    opacity: 0.5,
-  },
-  disclaimer: {
-    fontSize: 10,
-    textAlign: "center",
-    color: COLORS.muted,
-    paddingHorizontal: 18,
-    paddingBottom: 8,
-    backgroundColor: COLORS.white,
-  },
-});
+function createStyles(COLORS: typeof LIGHT_COLORS) {
+  return StyleSheet.create({
+    flex: {
+      flex: 1,
+    },
+
+    container: {
+      flex: 1,
+      backgroundColor: COLORS.background,
+    },
+
+    header: {
+      flexDirection: "row",
+      alignItems: "center",
+      paddingHorizontal: 20,
+      paddingVertical: 16,
+      borderBottomWidth: 1,
+      borderBottomColor: COLORS.border,
+      gap: 14,
+    },
+
+    headerText: {
+      flex: 1,
+    },
+
+    title: {
+      fontSize: 20,
+      fontWeight: "800",
+      color: COLORS.text,
+    },
+
+    subtitle: {
+      fontSize: 12,
+      color: COLORS.muted,
+      marginTop: 3,
+    },
+
+    aiIcon: {
+      width: 42,
+      height: 42,
+      borderRadius: 13,
+      backgroundColor: COLORS.card,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+
+    chatArea: {
+      flex: 1,
+    },
+
+    messages: {
+      padding: 17,
+      paddingBottom: 25,
+      gap: 17,
+    },
+
+    messageRow: {
+      flexDirection: "row",
+      alignItems: "flex-end",
+      gap: 8,
+    },
+
+    userRow: {
+      justifyContent: "flex-end",
+    },
+
+    assistantRow: {
+      justifyContent: "flex-start",
+    },
+
+    avatar: {
+      width: 32,
+      height: 32,
+      borderRadius: 16,
+      backgroundColor: COLORS.avatar,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+
+    bubble: {
+      maxWidth: "82%",
+      borderRadius: 17,
+      paddingHorizontal: 15,
+      paddingVertical: 12,
+    },
+
+    userBubble: {
+      backgroundColor: COLORS.userBubble,
+      borderBottomRightRadius: 5,
+    },
+
+    assistantBubble: {
+      backgroundColor: COLORS.card,
+      borderWidth: 1,
+      borderColor: COLORS.border,
+      borderBottomLeftRadius: 5,
+    },
+
+    messageText: {
+      fontSize: 14,
+      lineHeight: 21,
+      color: COLORS.text,
+    },
+
+    userMessageText: {
+      color: COLORS.userText,
+    },
+
+    loadingRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 10,
+      paddingLeft: 40,
+    },
+
+    loadingText: {
+      fontSize: 13,
+      color: COLORS.muted,
+    },
+
+    inputContainer: {
+      flexDirection: "row",
+      alignItems: "flex-end",
+      gap: 10,
+      paddingHorizontal: 16,
+      paddingTop: 12,
+      paddingBottom: 8,
+      borderTopWidth: 1,
+      borderTopColor: COLORS.border,
+      backgroundColor: COLORS.inputArea,
+    },
+
+    input: {
+      flex: 1,
+      minHeight: 46,
+      maxHeight: 110,
+      borderWidth: 1,
+      borderColor: COLORS.border,
+      borderRadius: 15,
+      paddingHorizontal: 14,
+      paddingVertical: 11,
+      color: COLORS.text,
+      backgroundColor: COLORS.input,
+      fontSize: 14,
+    },
+
+    sendButton: {
+      backgroundColor: COLORS.gold,
+      width: 46,
+      height: 46,
+      borderRadius: 14,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+
+    disabledButton: {
+      opacity: 0.5,
+    },
+
+    disclaimer: {
+      fontSize: 10,
+      textAlign: "center",
+      color: COLORS.muted,
+      paddingHorizontal: 18,
+      paddingBottom: 8,
+      backgroundColor: COLORS.inputArea,
+    },
+  });
+}

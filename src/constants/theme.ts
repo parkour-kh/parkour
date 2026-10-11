@@ -63,3 +63,32 @@ export const Spacing = {
 
 export const BottomTabInset = Platform.select({ ios: 50, android: 80 }) ?? 0;
 export const MaxContentWidth = 800;
+
+
+export const ParkourColors = {
+  light: {
+    background: "#F8FAF8",
+    surface: "#FFFFFF",
+    card: "#F3F6F3",
+    text: "#242424",
+    secondaryText: "#77756F",
+    border: "#E1E7E1",
+    accent: "#D4AF37",
+    selected: "#F4F1E5",
+    input: "#FFFFFF",
+    infoCard: "#F0EBE2",
+  },
+  dark: {
+    background: "#101827",
+    surface: "#182335",
+    card: "#202B3C",
+    text: "#FFFFFF",
+    secondaryText: "#AAB4C4",
+    border: "#354358",
+    accent: "#D4AF37",
+    selected: "#394151",
+    input: "#202B3C",
+    infoCard: "#283445",
+  },
+};
+

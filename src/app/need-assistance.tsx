@@ -9,11 +9,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useParkourTheme } from "@/contexts/parkour-theme";
 
-const COLORS = {
+const LIGHT_COLORS = {
   background: "#F8FAF8",
   text: "#242424",
   muted: "#77756F",
@@ -23,10 +25,32 @@ const COLORS = {
   white: "#FFFFFF",
   border: "#E1E7E1",
   red: "#C62828",
+  iconBackground: "#F0EBE2",
+  description: "#55534F",
+  goldText: "#242424",
+};
+
+const DARK_COLORS = {
+  background: "#101827",
+  text: "#FFFFFF",
+  muted: "#AAB4C4",
+  gold: "#D4AF37",
+  card: "#202B3C",
+  green: "#D4AF37",
+  white: "#FFFFFF",
+  border: "#354358",
+  red: "#C62828",
+  iconBackground: "#354358",
+  description: "#E4E7EC",
+  goldText: "#242424",
 };
 
 export default function NeedAssistance() {
   const router = useRouter();
+  const { isDark } = useParkourTheme();
+
+  const COLORS = isDark ? DARK_COLORS : LIGHT_COLORS;
+  const styles = createStyles(COLORS);
 
   const callEmergency = () => {
     Alert.alert(
@@ -51,13 +75,6 @@ export default function NeedAssistance() {
           },
         },
       ]
-    );
-  };
-
-  const comingSoon = (feature: string) => {
-    Alert.alert(
-      feature,
-      "We're working on connecting this feature to Parkour!"
     );
   };
 
@@ -90,7 +107,7 @@ export default function NeedAssistance() {
           and confidently.
         </Text>
 
-        {/* EMERGENCY */}
+        {/* EMERGENCY ASSISTANCE */}
         <View style={styles.card}>
           <View style={styles.iconCircle}>
             <Ionicons
@@ -131,7 +148,7 @@ export default function NeedAssistance() {
           </Text>
         </View>
 
-        {/* GEMINI */}
+        {/* GEMINI ASSISTANT */}
         <View style={styles.card}>
           <View style={styles.iconCircle}>
             <Ionicons
@@ -154,24 +171,27 @@ export default function NeedAssistance() {
             style={styles.goldButton}
             onPress={() => router.push("/ai-chat")}
             accessibilityRole="button"
+            accessibilityLabel="Open Gemini AI Chat"
           >
             <Ionicons
               name="chatbubble-ellipses-outline"
               size={19}
-              color={COLORS.text}
+              color={COLORS.goldText}
             />
+
             <Text style={styles.goldButtonText}>
               Open AI Chat
             </Text>
+
             <Ionicons
               name="arrow-forward"
               size={18}
-              color={COLORS.text}
+              color={COLORS.goldText}
             />
           </TouchableOpacity>
         </View>
 
-        {/* ELEVENLABS */}
+        {/* ELEVENLABS VOICE ASSISTANCE */}
         <View style={styles.card}>
           <View style={styles.iconCircle}>
             <Ionicons
@@ -186,28 +206,30 @@ export default function NeedAssistance() {
           </Text>
 
           <Text style={styles.description}>
-  Listen to parking information using ElevenLabs
-  voice technology. No account required.
-</Text>
+            Listen to parking information using ElevenLabs
+            voice technology. No account required.
+          </Text>
 
           <TouchableOpacity
-            style={styles.goldButton}
-            
-            onPress={() => router.push("/voice-accessibility")}
-            accessibilityRole="button"
-          >
+  style={styles.goldButton}
+  onPress={() => router.push("/voice-accessibility")}
+  accessibilityRole="button"
+  accessibilityLabel="Start ElevenLabs Voice Assistance"
+>
             <Ionicons
               name="mic-outline"
               size={20}
-              color={COLORS.text}
+              color={COLORS.goldText}
             />
+
             <Text style={styles.goldButtonText}>
               Start Voice Assistance
             </Text>
+
             <Ionicons
               name="arrow-forward"
               size={18}
-              color={COLORS.text}
+              color={COLORS.goldText}
             />
           </TouchableOpacity>
         </View>
@@ -219,6 +241,7 @@ export default function NeedAssistance() {
             size={19}
             color={COLORS.muted}
           />
+
           <Text style={styles.footerText}>
             Parkour is designed to make campus parking
             easier and more accessible for everyone.
@@ -229,138 +252,134 @@ export default function NeedAssistance() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
+function createStyles(COLORS: typeof LIGHT_COLORS) {
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: COLORS.background,
+    },
 
-  content: {
-    paddingHorizontal: 24,
-    paddingTop: 18,
-    paddingBottom: 45,
-  },
+    content: {
+      paddingHorizontal: 24,
+      paddingTop: 18,
+      paddingBottom: 45,
+    },
 
-  back: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-    marginBottom: 25,
-  },
+    back: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 8,
+      marginBottom: 25,
+    },
 
-  backText: {
-    color: COLORS.text,
-    fontSize: 15,
-    fontWeight: "500",
-  },
+    backText: {
+      color: COLORS.text,
+      fontSize: 15,
+      fontWeight: "500",
+    },
 
-  heading: {
-    color: COLORS.text,
-    fontSize: 29,
-    fontWeight: "800",
-    marginBottom: 9,
-  },
+    heading: {
+      color: COLORS.text,
+      fontSize: 29,
+      fontWeight: "800",
+      marginBottom: 9,
+    },
 
-  subtitle: {
-    color: COLORS.muted,
-    fontSize: 14,
-    lineHeight: 22,
-    marginBottom: 26,
-  },
+    subtitle: {
+      color: COLORS.muted,
+      fontSize: 14,
+      lineHeight: 22,
+      marginBottom: 26,
+    },
 
-  card: {
-    backgroundColor: COLORS.card,
-    borderRadius: 18,
-    padding: 21,
-    marginBottom: 17,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-  },
+    card: {
+      backgroundColor: COLORS.card,
+      borderRadius: 18,
+      padding: 21,
+      marginBottom: 17,
+      borderWidth: 1,
+      borderColor: COLORS.border,
+    },
 
-  iconCircle: {
-    width: 49,
-    height: 49,
-    borderRadius: 14,
-    backgroundColor: "#F0EBE2",
-    alignItems: "center",
-    justifyContent: "center",
-  },
+    iconCircle: {
+      width: 49,
+      height: 49,
+      borderRadius: 14,
+      backgroundColor: COLORS.iconBackground,
+      alignItems: "center",
+      justifyContent: "center",
+    },
 
-  cardTitle: {
-    color: COLORS.text,
-    fontSize: 19,
-    fontWeight: "700",
-    marginTop: 14,
-    marginBottom: 9,
-  },
+    cardTitle: {
+      color: COLORS.text,
+      fontSize: 19,
+      fontWeight: "700",
+      marginTop: 14,
+      marginBottom: 9,
+    },
 
-  description: {
-    color: "#55534F",
-    fontSize: 14,
-    lineHeight: 22,
-    marginBottom: 19,
-  },
+    description: {
+      color: COLORS.description,
+      fontSize: 14,
+      lineHeight: 22,
+      marginBottom: 19,
+    },
 
-  emergencyButton: {
-    backgroundColor: COLORS.red,
-    borderRadius: 12,
-    minHeight: 49,
-    paddingHorizontal: 15,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 10,
-  },
+    emergencyButton: {
+      backgroundColor: COLORS.red,
+      borderRadius: 12,
+      minHeight: 49,
+      paddingHorizontal: 15,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 10,
+    },
 
-  emergencyButtonText: {
-    color: COLORS.white,
-    fontWeight: "700",
-    fontSize: 15,
-  },
+    emergencyButtonText: {
+      color: COLORS.white,
+      fontWeight: "700",
+      fontSize: 15,
+    },
 
-  goldButton: {
-    backgroundColor: COLORS.gold,
-    borderRadius: 12,
-    minHeight: 49,
-    paddingHorizontal: 15,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 10,
-  },
+    goldButton: {
+      backgroundColor: COLORS.gold,
+      borderRadius: 12,
+      minHeight: 49,
+      paddingHorizontal: 15,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 10,
+    },
 
-  goldButtonText: {
-    color: COLORS.text,
-    fontWeight: "700",
-    fontSize: 14,
-    flexShrink: 1,
-  },
+    goldButtonText: {
+      color: COLORS.goldText,
+      fontWeight: "700",
+      fontSize: 14,
+      flexShrink: 1,
+    },
 
-  note: {
-    color: COLORS.muted,
-    fontSize: 12,
-    lineHeight: 19,
-    marginTop: 13,
-  },
+    note: {
+      color: COLORS.muted,
+      fontSize: 12,
+      lineHeight: 19,
+      marginTop: 13,
+    },
 
-  footer: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    gap: 9,
-    paddingHorizontal: 5,
-    marginTop: 7,
-  },
+    footer: {
+      flexDirection: "row",
+      alignItems: "flex-start",
+      gap: 9,
+      paddingHorizontal: 5,
+      marginTop: 7,
+    },
 
-  footerText: {
-    flex: 1,
-    color: COLORS.muted,
-    fontSize: 12,
-    lineHeight: 19,
-  },
-});
-
-
-
-
-
-
+    footerText: {
+      flex: 1,
+      color: COLORS.muted,
+      fontSize: 12,
+      lineHeight: 19,
+    },
+  });
+}

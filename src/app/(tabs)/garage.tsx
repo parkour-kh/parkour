@@ -1,3 +1,4 @@
+
 import React, { useEffect, useMemo, useState } from "react";
 import {
   ScrollView,
@@ -7,9 +8,10 @@ import {
   StyleSheet,
 } from "react-native";
 import { getGarage } from "../../api";
+import { useParkourTheme } from "@/contexts/parkour-theme";
 
 type Spot = {
-  id: string; // backend id, e.g. "a-1-03" = garage a, floor 1, space 03
+  id: string;
   occupied: boolean;
 };
 
@@ -17,12 +19,62 @@ type Floors = Record<number, Spot[]>;
 
 const REFRESH_MS = 3000;
 
-const GREEN = "#344238";
-const GOLD = "#D4AF37";
-const CREAM = "#F8FAF8";
-const DARK = "#242424";
+const LIGHT_COLORS = {
+  background: "#F8FAF8",
+  text: "#242424",
+  muted: "#77756F",
+  green: "#344238",
+  gold: "#D4AF37",
+  surface: "#FFFFFF",
+  border: "#D8DDD8",
+  summary: "#344238",
+  summaryMuted: "#E8E6DB",
+  selectedFloor: "#344238",
+  selectedFloorText: "#FFFFFF",
+  floorText: "#344238",
+  garage: "#EBEEE9",
+  open: "#D8ECDD",
+  openBorder: "#98C7A5",
+  taken: "#DADDD8",
+  takenBorder: "#BCC1BB",
+  recommended: "#FFF2C8",
+  spotText: "#242424",
+  driveLane: "#D3D8D1",
+  driveLaneText: "#6C776E",
+  saveButton: "#344238",
+  saveText: "#FFFFFF",
+  goldText: "#344238",
+  error: "#B23B32",
+};
 
-// The number shown on a tile: "a-1-03" -> "03"
+const DARK_COLORS = {
+  background: "#101827",
+  text: "#FFFFFF",
+  muted: "#AAB4C4",
+  green: "#D4AF37",
+  gold: "#D4AF37",
+  surface: "#202B3C",
+  border: "#354358",
+  summary: "#182335",
+  summaryMuted: "#C6D1DE",
+  selectedFloor: "#D4AF37",
+  selectedFloorText: "#242424",
+  floorText: "#FFFFFF",
+  garage: "#182335",
+  open: "#284D3B",
+  openBorder: "#477D60",
+  taken: "#394151",
+  takenBorder: "#586579",
+  recommended: "#735D2C",
+  spotText: "#FFFFFF",
+  driveLane: "#354358",
+  driveLaneText: "#D1D9E6",
+  saveButton: "#D4AF37",
+  saveText: "#242424",
+  goldText: "#242424",
+  error: "#FF9F98",
+};
+
 function spotNumber(id: string) {
   return id.split("-").pop() ?? id;
 }
@@ -34,47 +86,85 @@ export default function GarageScreen({
   garageName?: string;
   garageId?: string;
 }) {
+  const { isDark } = useParkourTheme();
+
+  const COLORS = isDark ? DARK_COLORS : LIGHT_COLORS;
+  const styles = createStyles(COLORS);
+
   const [selectedFloor, setFloor] = useState<number>(1);
   const [floors, setFloors] = useState<Floors>({});
-  const [loadError, setLoadError] = useState<string | null>(null);
-  const [savedSpot, setSavedSpot] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(
+    null
+  );
+  const [savedSpot, setSavedSpot] = useState<string | null>(
+    null
+  );
 
-  // Fetch the real spots from the backend now, then every few seconds.
+  // Keep your teammate's backend integration.
+  // Fetch spaces now, then refresh every 3 seconds.
   useEffect(() => {
     let cancelled = false;
 
     async function load() {
       try {
         const data = await getGarage(garageId);
+
         if (cancelled) return;
+
         const next: Floors = {};
-        for (const f of data.floors) {
-          next[f.floor] = f.spots.map((s) => ({ id: s.id, occupied: s.status !== "OPEN" }));
+
+        for (const floorData of data.floors) {
+          next[floorData.floor] = floorData.spots.map(
+            (spot) => ({
+              id: spot.id,
+              occupied: spot.status !== "OPEN",
+            })
+          );
         }
+
         setFloors(next);
         setLoadError(null);
       } catch {
-        if (!cancelled) setLoadError("Can't reach the parking server. Retrying...");
+        if (!cancelled) {
+          setLoadError(
+            "Can't reach the parking server. Retrying..."
+          );
+        }
       }
     }
 
-    load();
-    const timer = setInterval(load, REFRESH_MS);
+    void load();
+
+    const timer = setInterval(() => {
+      void load();
+    }, REFRESH_MS);
+
     return () => {
       cancelled = true;
       clearInterval(timer);
     };
   }, [garageId]);
 
-  const floorNumbers = Object.keys(floors).map(Number).sort((a, b) => a - b);
-  // if the selected floor doesn't exist (yet), fall back to the first real one
-  const floor = floors[selectedFloor] ? selectedFloor : floorNumbers[0] ?? 1;
+  const floorNumbers = Object.keys(floors)
+    .map(Number)
+    .sort((a, b) => a - b);
+
+  const floor = floors[selectedFloor]
+    ? selectedFloor
+    : floorNumbers[0] ?? 1;
+
   const spots = floors[floor] ?? [];
 
-  const available = spots.filter((spot) => !spot.occupied).length;
+  const available = spots.filter(
+    (spot) => !spot.occupied
+  ).length;
+
   const allSpots = Object.values(floors).flat();
   const totalSpots = allSpots.length;
-  const totalAvailable = allSpots.filter((spot) => !spot.occupied).length;
+
+  const totalAvailable = allSpots.filter(
+    (spot) => !spot.occupied
+  ).length;
 
   const recommended = useMemo(
     () => spots.find((spot) => !spot.occupied)?.id ?? null,
@@ -94,9 +184,18 @@ export default function GarageScreen({
           spot.occupied ? styles.taken : styles.open,
           isRecommended && styles.recommendedSpot,
         ]}
+        accessible
+        accessibilityLabel={`Spot ${spotNumber(spot.id)}, ${
+          spot.occupied ? "occupied" : "available"
+        }${isRecommended ? ", recommended" : ""}`}
       >
-        <Text style={styles.spotIcon}>{spot.occupied ? "🚗" : "✓"}</Text>
-        <Text style={styles.spotId}>{spotNumber(spot.id)}</Text>
+        <Text style={styles.spotIcon}>
+          {spot.occupied ? "🚗" : "✓"}
+        </Text>
+
+        <Text style={styles.spotId}>
+          {spotNumber(spot.id)}
+        </Text>
       </View>
     );
   }
@@ -107,30 +206,66 @@ export default function GarageScreen({
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
     >
-      <Text style={styles.eyebrow}>PARKOUR / GARAGE VIEW</Text>
-      <Text style={styles.heading}>{garageName}</Text>
+      <Text style={styles.eyebrow}>
+        PARKOUR / GARAGE VIEW
+      </Text>
+
+      <Text style={styles.heading}>
+        {garageName}
+      </Text>
+
       <Text style={styles.subtitle}>
         Find your space, without the guesswork.
       </Text>
-      {loadError && <Text style={styles.helper}>{loadError}</Text>}
-      {!loadError && totalSpots === 0 && <Text style={styles.helper}>Loading spaces...</Text>}
 
+      {loadError && (
+        <Text style={styles.errorText}>
+          {loadError}
+        </Text>
+      )}
+
+      {!loadError && totalSpots === 0 && (
+        <Text style={styles.helper}>
+          Loading spaces...
+        </Text>
+      )}
+
+      {/* AVAILABILITY SUMMARY */}
       <View style={styles.summary}>
         <View>
-          <Text style={styles.summaryLabel}>AVAILABLE SPACES</Text>
-          <Text style={styles.summaryNumber}>{totalAvailable}<Text style={styles.summaryTotal}> / {totalSpots}</Text></Text>
+          <Text style={styles.summaryLabel}>
+            AVAILABLE SPACES
+          </Text>
+
+          <Text style={styles.summaryNumber}>
+            {totalAvailable}
+            <Text style={styles.summaryTotal}>
+              {" "} / {totalSpots}
+            </Text>
+          </Text>
         </View>
+
         <View style={styles.summaryIcon}>
-          <Text style={styles.summaryCar}>P</Text>
+          <Text style={styles.summaryCar}>
+            P
+          </Text>
         </View>
       </View>
 
-      <Text style={styles.sectionTitle}>Select a floor</Text>
+      {/* FLOOR SELECTION */}
+      <Text style={styles.sectionTitle}>
+        Select a floor
+      </Text>
+
       <View style={styles.floorRow}>
         {floorNumbers.map((number) => (
           <Pressable
             key={number}
             onPress={() => setFloor(number)}
+            accessibilityRole="button"
+            accessibilityState={{
+              selected: floor === number,
+            }}
             style={[
               styles.floorButton,
               floor === number && styles.floorSelected,
@@ -148,24 +283,42 @@ export default function GarageScreen({
         ))}
       </View>
 
+      {/* SELECTED FLOOR */}
       <View style={styles.floorHeading}>
-        <Text style={styles.sectionTitle}>Floor {floor}</Text>
-        <Text style={styles.floorAvailability}>{available} open</Text>
+        <Text style={styles.sectionTitle}>
+          Floor {floor}
+        </Text>
+
+        <Text style={styles.floorAvailability}>
+          {available} open
+        </Text>
       </View>
 
+      {/* LEGEND */}
       <View style={styles.legend}>
-        <Text style={styles.legendText}>🟢 Open</Text>
-        <Text style={styles.legendText}>⚪ Taken</Text>
-        <Text style={styles.legendText}>⭐ Recommended</Text>
+        <Text style={styles.legendText}>
+          🟢 Open
+        </Text>
+
+        <Text style={styles.legendText}>
+          ⚪ Taken
+        </Text>
+
+        <Text style={styles.legendText}>
+          ⭐ Recommended
+        </Text>
       </View>
 
+      {/* PARKING SPACE GRID */}
       <View style={styles.garage}>
         <View style={styles.spotRow}>
           {spots.slice(0, half).map(renderSpot)}
         </View>
 
         <View style={styles.driveLane}>
-          <Text style={styles.driveLaneText}>← DRIVE LANE →</Text>
+          <Text style={styles.driveLaneText}>
+            ← DRIVE LANE →
+          </Text>
         </View>
 
         <View style={styles.spotRow}>
@@ -174,82 +327,336 @@ export default function GarageScreen({
       </View>
 
       <Text style={styles.helper}>
-        Live from the parking server. Updates every few seconds.
+        Parking availability comes from the server
+        and refreshes every few seconds.
       </Text>
 
+      {/* RECOMMENDATION */}
       <View style={styles.recommendation}>
-        <Text style={styles.recommendationEyebrow}>YOUR BEST AVAILABLE SPACE</Text>
-        <Text style={styles.recommendationTitle}>
-          {recommended ? `Floor ${floor} · Spot ${spotNumber(recommended)}` : "Floor full"}
+        <Text style={styles.recommendationEyebrow}>
+          YOUR BEST AVAILABLE SPACE
         </Text>
+
+        <Text style={styles.recommendationTitle}>
+          {recommended
+            ? `Floor ${floor} · Spot ${spotNumber(recommended)}`
+            : totalSpots === 0
+              ? "Waiting for parking data"
+              : "Floor full"}
+        </Text>
+
         <Text style={styles.recommendationDetail}>
           {recommended
             ? "Highlighted in gold on the garage map."
-            : "Try selecting another floor."}
+            : totalSpots === 0
+              ? "Parking spaces will appear when the server responds."
+              : "Try selecting another floor."}
         </Text>
 
         {recommended && (
           <Pressable
             style={styles.saveButton}
             onPress={() => setSavedSpot(recommended)}
+            accessibilityRole="button"
           >
-            <Text style={styles.saveText}>Save My Spot</Text>
+            <Text style={styles.saveText}>
+              Save My Spot
+            </Text>
           </Pressable>
         )}
 
         {savedSpot && (
           <Text style={styles.savedText}>
-            Saved: Floor {savedSpot.split("-")[1]}, Spot {spotNumber(savedSpot)}
+            Saved: Floor {savedSpot.split("-")[1]},
+            Spot {spotNumber(savedSpot)}
           </Text>
         )}
       </View>
 
       <Text style={styles.disclaimer}>
-        Prototype data: most spaces are simulated, a few are live sensors.
+        Prototype data: most spaces are simulated,
+        and a few are connected to live sensors.
       </Text>
     </ScrollView>
   );
 }
 
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: CREAM },
-  content: { padding: 20, paddingBottom: 60 },
-  eyebrow: { fontSize: 10, fontWeight: "800", letterSpacing: 2, color: GOLD, marginBottom: 8 },
-  heading: { fontSize: 32, fontWeight: "800", color: DARK },
-  subtitle: { color: "#77756F", fontSize: 14, marginTop: 5, marginBottom: 22 },
-  summary: { backgroundColor: GREEN, borderRadius: 18, padding: 22, flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 26 },
-  summaryLabel: { color: "#E8E6DB", fontSize: 11, fontWeight: "700", letterSpacing: 1 },
-  summaryNumber: { color: GOLD, fontSize: 39, fontWeight: "800", marginTop: 5 },
-  summaryTotal: { color: "#E8E6DB", fontSize: 19, fontWeight: "500" },
-  summaryIcon: { width: 52, height: 52, borderRadius: 14, backgroundColor: GOLD, alignItems: "center", justifyContent: "center" },
-  summaryCar: { fontSize: 28, fontWeight: "900", color: GREEN },
-  sectionTitle: { fontSize: 20, fontWeight: "800", color: DARK },
-  floorRow: { flexDirection: "row", gap: 9, marginTop: 14, marginBottom: 25 },
-  floorButton: { flex: 1, paddingVertical: 13, borderRadius: 12, borderWidth: 1, borderColor: "#D8DDD8", alignItems: "center", backgroundColor: "#FFFFFF" },
-  floorSelected: { backgroundColor: GREEN, borderColor: GREEN },
-  floorText: { color: GREEN, fontWeight: "700", fontSize: 13 },
-  floorTextSelected: { color: "#FFFFFF" },
-  floorHeading: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
-  floorAvailability: { fontSize: 13, fontWeight: "700", color: GREEN },
-  legend: { flexDirection: "row", justifyContent: "space-between", marginTop: 14, marginBottom: 16 },
-  legendText: { fontSize: 11, color: "#77756F" },
-  garage: { backgroundColor: "#EBEEE9", borderRadius: 16, padding: 10, borderWidth: 1, borderColor: "#D8DDD8" },
-  spotRow: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", gap: 5 },
-  spot: { width: "15%", height: 57, borderRadius: 7, borderWidth: 1, justifyContent: "center", alignItems: "center", marginBottom: 5 },
-  open: { backgroundColor: "#D8ECDD", borderColor: "#98C7A5" },
-  taken: { backgroundColor: "#DADDD8", borderColor: "#BCC1BB" },
-  recommendedSpot: { borderColor: GOLD, borderWidth: 3, backgroundColor: "#FFF2C8" },
-  spotIcon: { fontSize: 16 },
-  spotId: { fontSize: 10, fontWeight: "800", color: DARK, marginTop: 2 },
-  driveLane: { backgroundColor: "#D3D8D1", height: 48, justifyContent: "center", alignItems: "center", marginVertical: 12, borderRadius: 7 },
-  driveLaneText: { color: "#6C776E", fontWeight: "800", letterSpacing: 2, fontSize: 10 },
-  helper: { textAlign: "center", fontSize: 12, color: "#77756F", marginTop: 12 },
-  recommendation: { marginTop: 24, backgroundColor: "#FFFFFF", borderRadius: 17, padding: 20, borderWidth: 1, borderColor: "#E1E7E1" },
-  recommendationEyebrow: { fontSize: 10, letterSpacing: 1, fontWeight: "800", color: GREEN },
-  recommendationTitle: { fontSize: 22, fontWeight: "800", color: DARK, marginTop: 9 },
-  recommendationDetail: { color: "#77756F", fontSize: 13, marginTop: 6 },
-  saveButton: { marginTop: 18, backgroundColor: GREEN, borderRadius: 12, padding: 15, alignItems: "center" },
-  saveText: { color: "#FFFFFF", fontWeight: "800", fontSize: 14 },
-  savedText: { color: GREEN, fontWeight: "700", marginTop: 14 },
-  disclaimer: { color: "#77756F", fontSize: 11, textAlign: "center", marginTop: 22 },
-});
+function createStyles(COLORS: typeof LIGHT_COLORS) {
+  return StyleSheet.create({
+    screen: {
+      flex: 1,
+      backgroundColor: COLORS.background,
+    },
+
+    content: {
+      padding: 20,
+      paddingBottom: 60,
+    },
+
+    eyebrow: {
+      fontSize: 10,
+      fontWeight: "800",
+      letterSpacing: 2,
+      color: COLORS.gold,
+      marginBottom: 8,
+    },
+
+    heading: {
+      fontSize: 32,
+      fontWeight: "800",
+      color: COLORS.text,
+    },
+
+    subtitle: {
+      color: COLORS.muted,
+      fontSize: 14,
+      marginTop: 5,
+      marginBottom: 22,
+    },
+
+    errorText: {
+      color: COLORS.error,
+      fontSize: 13,
+      marginBottom: 14,
+      lineHeight: 20,
+    },
+
+    summary: {
+      backgroundColor: COLORS.summary,
+      borderRadius: 18,
+      padding: 22,
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 26,
+    },
+
+    summaryLabel: {
+      color: COLORS.summaryMuted,
+      fontSize: 11,
+      fontWeight: "700",
+      letterSpacing: 1,
+    },
+
+    summaryNumber: {
+      color: COLORS.gold,
+      fontSize: 39,
+      fontWeight: "800",
+      marginTop: 5,
+    },
+
+    summaryTotal: {
+      color: COLORS.summaryMuted,
+      fontSize: 19,
+      fontWeight: "500",
+    },
+
+    summaryIcon: {
+      width: 52,
+      height: 52,
+      borderRadius: 14,
+      backgroundColor: COLORS.gold,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+
+    summaryCar: {
+      fontSize: 28,
+      fontWeight: "900",
+      color: COLORS.goldText,
+    },
+
+    sectionTitle: {
+      fontSize: 20,
+      fontWeight: "800",
+      color: COLORS.text,
+    },
+
+    floorRow: {
+      flexDirection: "row",
+      gap: 9,
+      marginTop: 14,
+      marginBottom: 25,
+    },
+
+    floorButton: {
+      flex: 1,
+      paddingVertical: 13,
+      borderRadius: 12,
+      borderWidth: 1,
+      borderColor: COLORS.border,
+      alignItems: "center",
+      backgroundColor: COLORS.surface,
+    },
+
+    floorSelected: {
+      backgroundColor: COLORS.selectedFloor,
+      borderColor: COLORS.selectedFloor,
+    },
+
+    floorText: {
+      color: COLORS.floorText,
+      fontWeight: "700",
+      fontSize: 13,
+    },
+
+    floorTextSelected: {
+      color: COLORS.selectedFloorText,
+    },
+
+    floorHeading: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
+
+    floorAvailability: {
+      fontSize: 13,
+      fontWeight: "700",
+      color: COLORS.green,
+    },
+
+    legend: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      marginTop: 14,
+      marginBottom: 16,
+    },
+
+    legendText: {
+      fontSize: 11,
+      color: COLORS.muted,
+    },
+
+    garage: {
+      backgroundColor: COLORS.garage,
+      borderRadius: 16,
+      padding: 10,
+      borderWidth: 1,
+      borderColor: COLORS.border,
+    },
+
+    spotRow: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      justifyContent: "space-between",
+      gap: 5,
+    },
+
+    spot: {
+      width: "15%",
+      height: 57,
+      borderRadius: 7,
+      borderWidth: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      marginBottom: 5,
+    },
+
+    open: {
+      backgroundColor: COLORS.open,
+      borderColor: COLORS.openBorder,
+    },
+
+    taken: {
+      backgroundColor: COLORS.taken,
+      borderColor: COLORS.takenBorder,
+    },
+
+    recommendedSpot: {
+      borderColor: COLORS.gold,
+      borderWidth: 3,
+      backgroundColor: COLORS.recommended,
+    },
+
+    spotIcon: {
+      fontSize: 16,
+    },
+
+    spotId: {
+      fontSize: 10,
+      fontWeight: "800",
+      color: COLORS.spotText,
+      marginTop: 2,
+    },
+
+    driveLane: {
+      backgroundColor: COLORS.driveLane,
+      height: 48,
+      justifyContent: "center",
+      alignItems: "center",
+      marginVertical: 12,
+      borderRadius: 7,
+    },
+
+    driveLaneText: {
+      color: COLORS.driveLaneText,
+      fontWeight: "800",
+      letterSpacing: 2,
+      fontSize: 10,
+    },
+
+    helper: {
+      textAlign: "center",
+      fontSize: 12,
+      color: COLORS.muted,
+      marginTop: 12,
+    },
+
+    recommendation: {
+      marginTop: 24,
+      backgroundColor: COLORS.surface,
+      borderRadius: 17,
+      padding: 20,
+      borderWidth: 1,
+      borderColor: COLORS.border,
+    },
+
+    recommendationEyebrow: {
+      fontSize: 10,
+      letterSpacing: 1,
+      fontWeight: "800",
+      color: COLORS.green,
+    },
+
+    recommendationTitle: {
+      fontSize: 22,
+      fontWeight: "800",
+      color: COLORS.text,
+      marginTop: 9,
+    },
+
+    recommendationDetail: {
+      color: COLORS.muted,
+      fontSize: 13,
+      marginTop: 6,
+    },
+
+    saveButton: {
+      marginTop: 18,
+      backgroundColor: COLORS.saveButton,
+      borderRadius: 12,
+      padding: 15,
+      alignItems: "center",
+    },
+
+    saveText: {
+      color: COLORS.saveText,
+      fontWeight: "800",
+      fontSize: 14,
+    },
+
+    savedText: {
+      color: COLORS.green,
+      fontWeight: "700",
+      marginTop: 14,
+    },
+
+    disclaimer: {
+      color: COLORS.muted,
+      fontSize: 11,
+      textAlign: "center",
+      marginTop: 22,
+    },
+  });
+}
