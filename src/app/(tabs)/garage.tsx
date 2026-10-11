@@ -99,6 +99,10 @@ export default function GarageScreen({
   const [savedSpot, setSavedSpot] = useState<string | null>(
     null
   );
+  // the open space the user tapped (null = none, falls back to the recommended one)
+  const [chosenSpot, setChosenSpot] = useState<string | null>(
+    null
+  );
 
   // Keep your teammate's backend integration.
   // Fetch spaces now, then refresh every 3 seconds.
@@ -173,30 +177,73 @@ export default function GarageScreen({
 
   const half = Math.ceil(spots.length / 2);
 
+  // The tapped space counts only while it is still open (live data can change under us).
+  const chosen =
+    chosenSpot &&
+    allSpots.some((s) => s.id === chosenSpot && !s.occupied)
+      ? chosenSpot
+      : null;
+
+  // What "Save My Spot" saves: the tapped space, else the recommended one.
+  const target = chosen ?? recommended;
+  const targetFloor = target ? target.split("-")[1] : String(floor);
+
   function renderSpot(spot: Spot) {
     const isRecommended = spot.id === recommended;
+    const isChosen = spot.id === chosen;
 
-    return (
-      <View
-        key={spot.id}
-        style={[
-          styles.spot,
-          spot.occupied ? styles.taken : styles.open,
-          isRecommended && styles.recommendedSpot,
-        ]}
-        accessible
-        accessibilityLabel={`Spot ${spotNumber(spot.id)}, ${
-          spot.occupied ? "occupied" : "available"
-        }${isRecommended ? ", recommended" : ""}`}
-      >
+    const tileStyle = [
+      styles.spot,
+      spot.occupied ? styles.taken : styles.open,
+      isRecommended && !isChosen && styles.recommendedSpot,
+      isChosen && styles.selectedSpot,
+    ];
+
+    const label = `Spot ${spotNumber(spot.id)}, ${
+      spot.occupied ? "occupied" : "available"
+    }${isRecommended ? ", recommended" : ""}${
+      isChosen ? ", selected" : ""
+    }`;
+
+    const content = (
+      <>
         <Text style={styles.spotIcon}>
-          {spot.occupied ? "🚗" : "✓"}
+          {spot.occupied ? "🚗" : isChosen ? "★" : "✓"}
         </Text>
 
         <Text style={styles.spotId}>
           {spotNumber(spot.id)}
         </Text>
-      </View>
+      </>
+    );
+
+    // Taken spaces can't be picked; open spaces can.
+    if (spot.occupied) {
+      return (
+        <View
+          key={spot.id}
+          style={tileStyle}
+          accessible
+          accessibilityLabel={label}
+        >
+          {content}
+        </View>
+      );
+    }
+
+    return (
+      <Pressable
+        key={spot.id}
+        onPress={() =>
+          setChosenSpot(isChosen ? null : spot.id)
+        }
+        accessibilityRole="button"
+        accessibilityLabel={label}
+        accessibilityState={{ selected: isChosen }}
+        style={tileStyle}
+      >
+        {content}
+      </Pressable>
     );
   }
 
@@ -327,36 +374,41 @@ export default function GarageScreen({
       </View>
 
       <Text style={styles.helper}>
-        Parking availability comes from the server
-        and refreshes every few seconds.
+        Tap an open space to select it. Availability
+        comes from the server and refreshes every few
+        seconds.
       </Text>
 
-      {/* RECOMMENDATION */}
+      {/* RECOMMENDATION / SELECTION */}
       <View style={styles.recommendation}>
         <Text style={styles.recommendationEyebrow}>
-          YOUR BEST AVAILABLE SPACE
+          {chosen
+            ? "YOUR SELECTED SPACE"
+            : "YOUR BEST AVAILABLE SPACE"}
         </Text>
 
         <Text style={styles.recommendationTitle}>
-          {recommended
-            ? `Floor ${floor} · Spot ${spotNumber(recommended)}`
+          {target
+            ? `Floor ${targetFloor} · Spot ${spotNumber(target)}`
             : totalSpots === 0
               ? "Waiting for parking data"
               : "Floor full"}
         </Text>
 
         <Text style={styles.recommendationDetail}>
-          {recommended
-            ? "Highlighted in gold on the garage map."
-            : totalSpots === 0
-              ? "Parking spaces will appear when the server responds."
-              : "Try selecting another floor."}
+          {chosen
+            ? "You picked this space. Tap it again to clear."
+            : recommended
+              ? "Highlighted in gold on the garage map."
+              : totalSpots === 0
+                ? "Parking spaces will appear when the server responds."
+                : "Try selecting another floor."}
         </Text>
 
-        {recommended && (
+        {target && (
           <Pressable
             style={styles.saveButton}
-            onPress={() => setSavedSpot(recommended)}
+            onPress={() => setSavedSpot(target)}
             accessibilityRole="button"
           >
             <Text style={styles.saveText}>
@@ -567,6 +619,12 @@ function createStyles(COLORS: typeof LIGHT_COLORS) {
       borderColor: COLORS.gold,
       borderWidth: 3,
       backgroundColor: COLORS.recommended,
+    },
+
+    selectedSpot: {
+      borderColor: COLORS.text,
+      borderWidth: 3,
+      backgroundColor: COLORS.openBorder,
     },
 
     spotIcon: {

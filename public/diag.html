@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parkour diagnostics</title>
+<style>
+  body { font-family: -apple-system, Arial, sans-serif; margin: 16px; background: #fff; color: #111; }
+  h1 { font-size: 20px; }
+  .row { border-bottom: 1px solid #ddd; padding: 8px 0; font-size: 15px; word-break: break-word; }
+  .ok { color: #0a7d2c; font-weight: bold; }
+  .bad { color: #b00020; font-weight: bold; }
+  .box { background: #f4f4f4; padding: 8px; margin-top: 8px; font-size: 13px; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<h1>Parkour diagnostics</h1>
+<div id="out"></div>
+<div id="root" style="display:none"></div>
+<script>
+var out = document.getElementById("out");
+function row(label, value, good) {
+  var d = document.createElement("div");
+  d.className = "row";
+  d.innerHTML = "<b>" + label + "</b>: <span class='" + (good === true ? "ok" : good === false ? "bad" : "") + "'>" + String(value).replace(/</g, "&lt;") + "</span>";
+  out.appendChild(d);
+}
+function errbox(t) {
+  var d = document.createElement("div");
+  d.className = "box";
+  d.textContent = t;
+  out.appendChild(d);
+}
+
+row("Browser", navigator.userAgent);
+row("This page loaded", "yes", true);
+row("Secure context (https)", window.isSecureContext ? "yes" : "no (normal for http)");
+
+try { localStorage.setItem("t", "1"); localStorage.removeItem("t"); row("localStorage", "works", true); }
+catch (e) { row("localStorage", "BLOCKED: " + e.message, false); }
+
+try { new RegExp("(?<=a)b"); row("Regex lookbehind", "supported", true); }
+catch (e) { row("Regex lookbehind", "NOT supported (older iPhone/Safari)", false); }
+
+row("Promise", typeof Promise !== "undefined" ? "yes" : "NO", typeof Promise !== "undefined");
+row("fetch", typeof fetch !== "undefined" ? "yes" : "NO", typeof fetch !== "undefined");
+row("Array.prototype.at", [].at ? "yes" : "no (older browser)", !!([].at));
+row("structuredClone", typeof structuredClone !== "undefined" ? "yes" : "no (older browser)");
+
+// 1. Can this device reach the API?
+var x = new XMLHttpRequest();
+x.open("GET", "/api/garages/a");
+x.onload = function () {
+  var ok = x.status === 200;
+  var good = false;
+  try { good = !!JSON.parse(x.responseText).floors; } catch (e) {}
+  row("API /api/garages/a", "HTTP " + x.status + (good ? " (valid data)" : " (NOT valid data)"), ok && good);
+  loadBundle();
+};
+x.onerror = function () { row("API /api/garages/a", "NETWORK ERROR (cannot reach server)", false); loadBundle(); };
+x.send();
+
+// 2. Load the real app bundle and report any crash
+var errors = [];
+window.onerror = function (msg, src, line, col) {
+  errors.push(msg + "  (" + String(src).split("/").pop() + ":" + line + ")");
+};
+window.addEventListener("unhandledrejection", function (e) {
+  errors.push("promise: " + (e.reason && e.reason.message ? e.reason.message : e.reason));
+});
+
+function loadBundle() {
+  var r = new XMLHttpRequest();
+  r.open("GET", "/live");
+  r.onload = function () {
+    var m = r.responseText.match(/\/_expo\/static\/js\/web\/[^"']+\.js/);
+    if (!m) { row("App bundle", "not found in /live", false); return; }
+    row("App bundle file", m[0].split("/").pop());
+    var s = document.createElement("script");
+    s.src = m[0];
+    s.onerror = function () { row("App bundle download", "FAILED to download", false); };
+    s.onload = function () {
+      row("App bundle download", "ok", true);
+      setTimeout(function () {
+        if (errors.length) {
+          row("App crashed with", errors.length + " error(s)", false);
+          errbox(errors.join("\n"));
+        } else {
+          row("App started", "no crash detected", true);
+        }
+        row("Result", "Send a screenshot of this page", null);
+      }, 6000);
+    };
+    document.body.appendChild(s);
+  };
+  r.onerror = function () { row("App bundle", "could not load /live", false); };
+  r.send();
+}
+</script>
+</body>
+</html>
