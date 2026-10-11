@@ -11,6 +11,8 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import { useParkourTheme } from "@/contexts/parkour-theme";
+import { getGarage } from "../api";
+import { GARAGES } from "../data/parking";
 
 type ParkingSpot = {
   garage: string;
@@ -18,11 +20,6 @@ type ParkingSpot = {
   spot: string;
 };
 
-const DEMO_SPOTS: ParkingSpot[] = [
-  { garage: "Garage A", floor: "2", spot: "B24" },
-  { garage: "Garage A", floor: "2", spot: "B25" },
-  { garage: "Garage A", floor: "3", spot: "C12" },
-];
 
 const LIGHT_COLORS = {
   background: "#FAF8F3",
@@ -65,6 +62,11 @@ export default function MySpotScreen() {
     "start"
   );
 
+  const [parkingSpots, setParkingSpots] = useState<ParkingSpot[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [garageId, setGarageId] = useState("a");
+
   const [selectedSpot, setSelectedSpot] =
     useState<ParkingSpot | null>(null);
 
@@ -86,9 +88,27 @@ export default function MySpotScreen() {
     void loadSavedSpot();
   }, []);
 
-  function showDemoSpots() {
-    setSelectedSpot(DEMO_SPOTS[0]);
-    setStep("confirm");
+  async function loadOccupiedSpots(id = garageId) {
+    setLoading(true);
+    setLoadError(null);
+    try {
+      const data = await getGarage(id);
+      const garageName = GARAGES.find((g) => g.id === id)?.name ?? data.garage;
+      const occupied = data.floors.flatMap((floor) =>
+        floor.spots.filter((spot) => spot.status === "TAKEN").map((spot) => ({
+          garage: garageName,
+          floor: String(floor.floor),
+          spot: spot.id,
+        }))
+      );
+      setParkingSpots(occupied);
+      setSelectedSpot(null);
+      setStep("confirm");
+    } catch {
+      setLoadError("Could not connect to the parking backend. Check your server and try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function confirmSpot() {
@@ -158,19 +178,36 @@ export default function MySpotScreen() {
             </Text>
           </View>
 
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>Choose a garage</Text>
+            {GARAGES.map((garage) => (
+              <TouchableOpacity
+                key={garage.id}
+                accessibilityRole="button"
+                accessibilityState={{ selected: garageId === garage.id }}
+                onPress={() => setGarageId(garage.id)}
+                style={styles.spotCard}
+              >
+                <Text style={styles.spotTitle}>
+                  {garageId === garage.id ? "✓ " : ""}{garage.name}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+          {loadError && <Text style={styles.deleteText}>{loadError}</Text>}
           <TouchableOpacity
+            disabled={loading}
             style={styles.button}
-            onPress={showDemoSpots}
+            onPress={() => void loadOccupiedSpots()}
             accessibilityRole="button"
           >
             <Text style={styles.buttonText}>
-              Try Parking Detection Demo
+              {loading ? "Loading occupied spots..." : "Check occupied parking spots"}
             </Text>
           </TouchableOpacity>
 
           <Text style={styles.note}>
-            Demo mode: The next screen uses sample parking
-            spots. Live camera detection is not connected yet.
+            Uses the same parking backend as the Search & Park garage details.\n            Availability may be simulated; confirm your actual location before saving.
           </Text>
         </>
       )}
@@ -181,11 +218,10 @@ export default function MySpotScreen() {
           <Text style={styles.title}>Confirm Your Spot</Text>
 
           <Text style={styles.subtitle}>
-            Choose your parking location from these demo
-            examples. Nothing is saved until you confirm.
+            These occupied spaces come from the parking backend.\n            Select your actual space; nothing is saved until you confirm.
           </Text>
 
-          {DEMO_SPOTS.map((item, index) => {
+          {parkingSpots.map((item, index) => {
             const isSelected =
               selectedSpot?.garage === item.garage &&
               selectedSpot?.floor === item.floor &&
@@ -217,6 +253,9 @@ export default function MySpotScreen() {
             );
           })}
 
+          {parkingSpots.length === 0 && (
+            <Text style={styles.note}>No occupied spots were reported for this garage.</Text>
+          )}
           <TouchableOpacity
             style={styles.button}
             onPress={confirmSpot}
