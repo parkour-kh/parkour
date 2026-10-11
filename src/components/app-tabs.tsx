@@ -1,12 +1,11 @@
 ﻿import { NativeTabs } from 'expo-router/unstable-native-tabs';
-import { useColorScheme } from 'react-native';
+import { useParkourTheme } from '@/contexts/parkour-theme';
 
 import { Colors } from '@/constants/theme';
 
 export default function AppTabs() {
-  const scheme = useColorScheme();
-  const colors = Colors[scheme === 'unspecified' ? 'light' : scheme];
-
+  const { appearance } = useParkourTheme();
+const colors = Colors[appearance];
   return (
     <NativeTabs
       backgroundColor={colors.background}
@@ -27,6 +26,10 @@ export default function AppTabs() {
           renderingMode="template"
         />
       </NativeTabs.Trigger>
+      <NativeTabs.Trigger name="settings">
+  <NativeTabs.Trigger.Label>Settings</NativeTabs.Trigger.Label>
+  <NativeTabs.Trigger.Icon sf="gearshape" />
+</NativeTabs.Trigger>
       <NativeTabs.Trigger name="garage" hidden />
     </NativeTabs>
   );

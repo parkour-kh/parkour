@@ -12,8 +12,10 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useParkourTheme } from "@/contexts/parkour-theme";
 
-const COLORS = {
+
+const LIGHT_COLORS = {
   background: "#F8FAF8",
   text: "#242424",
   muted: "#77756F",
@@ -23,10 +25,31 @@ const COLORS = {
   white: "#FFFFFF",
   border: "#E1E7E1",
   red: "#C62828",
+  iconBackground: "#F0EBE2",
+  description: "#55534F",
+  goldText: "#242424",
+};
+
+const DARK_COLORS = {
+  background: "#101827",
+  text: "#FFFFFF",
+  muted: "#AAB4C4",
+  gold: "#D4AF37",
+  card: "#202B3C",
+  green: "#D4AF37",
+  white: "#FFFFFF",
+  border: "#354358",
+  red: "#C62828",
+  iconBackground: "#354358",
+  description: "#E4E7EC",
+  goldText: "#242424",
 };
 
 export default function NeedAssistance() {
   const router = useRouter();
+  const { isDark } = useParkourTheme();
+  const COLORS = isDark ? DARK_COLORS : LIGHT_COLORS;
+  const styles = createStyles(COLORS);
 
   const callEmergency = () => {
     Alert.alert(
@@ -231,8 +254,8 @@ export default function NeedAssistance() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
+function createStyles(COLORS: typeof LIGHT_COLORS) {
+  return StyleSheet.create({  container: {
     flex: 1,
     backgroundColor: COLORS.background,
   },
@@ -283,7 +306,7 @@ const styles = StyleSheet.create({
     width: 49,
     height: 49,
     borderRadius: 14,
-    backgroundColor: "#F0EBE2",
+    backgroundColor: COLORS.iconBackground,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -297,7 +320,7 @@ const styles = StyleSheet.create({
   },
 
   description: {
-    color: "#55534F",
+    color: COLORS.description,
     fontSize: 14,
     lineHeight: 22,
     marginBottom: 19,
@@ -332,7 +355,7 @@ const styles = StyleSheet.create({
   },
 
   goldButtonText: {
-    color: COLORS.text,
+    color: COLORS.goldText,
     fontWeight: "700",
     fontSize: 14,
     flexShrink: 1,
@@ -359,4 +382,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 19,
   },
-});
+  });
+}

@@ -16,8 +16,10 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import CampusDestinationSearch, { SelectedPlace } from "../../components/CampusDestinationSearch";
+import { useParkourTheme } from "@/contexts/parkour-theme";
 
-const COLORS = {
+
+const LIGHT_COLORS = {
   background: "#F8FAF8",
   text: "#242424",
   muted: "#77756F",
@@ -26,10 +28,31 @@ const COLORS = {
   beige: "#F0EBE2",
   white: "#FFFFFF",
   green: "#344238",
+  border: "#E1E7E1",
+  selected: "#F4F1E5",
+  tipText: "#55534F",
 };
+
+const DARK_COLORS = {
+  background: "#101827",
+  text: "#FFFFFF",
+  muted: "#AAB4C4",
+  gold: "#D4AF37",
+  card: "#202B3C",
+  beige: "#283445",
+  white: "#FFFFFF",
+  green: "#344238",
+  border: "#354358",
+  selected: "#394151",
+  tipText: "#E4E7EC",
+};
+
 
 export default function HomeScreen() {
   const router = useRouter();
+  const { isDark } = useParkourTheme();
+  const COLORS = isDark ? DARK_COLORS : LIGHT_COLORS;
+  const styles = createStyles(COLORS);
 
   const [permit, setPermit] = useState<"Student" | "Employee">("Student");
 
@@ -54,7 +77,7 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle={isDark ? "light-content" : "dark-content"} />
 
       <ScrollView
         style={styles.scrollView}
@@ -231,7 +254,8 @@ onPress={() => {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(COLORS: typeof LIGHT_COLORS) {
+  return StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: COLORS.background,
@@ -386,7 +410,7 @@ const styles = StyleSheet.create({
     height: 45,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#E1E7E1",
+    borderColor: COLORS.border,
     backgroundColor: COLORS.card,
     flexDirection: "row",
     alignItems: "center",
@@ -396,7 +420,7 @@ const styles = StyleSheet.create({
   permitSelected: {
     borderColor: COLORS.gold,
     borderWidth: 2,
-    backgroundColor: "#F4F1E5",
+    backgroundColor: COLORS.selected,
   },
   permitText: {
     fontSize: 14,
@@ -452,6 +476,7 @@ const styles = StyleSheet.create({
   tipText: {
     fontSize: 14,
     lineHeight: 21,
-    color: "#55534F",
+    color: COLORS.tipText,
   },
-});
+  });
+}
