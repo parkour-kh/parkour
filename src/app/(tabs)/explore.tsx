@@ -215,7 +215,10 @@ export default function ExploreScreen() {
           </Text>
         </TouchableOpacity>
         <View style={{ flex: 1 }}>
-          <GarageScreen garageName={selectedGarage?.name ?? "Garage A"} />
+          <GarageScreen
+            garageName={selectedGarage?.name ?? "Garage A"}
+            garageId={selectedGarage?.id ?? "a"}
+          />
         </View>
       </SafeAreaView>
     );

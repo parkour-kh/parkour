@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   ScrollView,
   View,
@@ -6,63 +6,89 @@ import {
   Pressable,
   StyleSheet,
 } from "react-native";
+import { getGarage } from "../../api";
 
 type Spot = {
-  id: string;
+  id: string; // backend id, e.g. "a-1-03" = garage a, floor 1, space 03
   occupied: boolean;
 };
 
-type FloorNumber = 1 | 2 | 3;
+type Floors = Record<number, Spot[]>;
+
+const REFRESH_MS = 3000;
 
 const GREEN = "#344238";
 const GOLD = "#D4AF37";
 const CREAM = "#F8FAF8";
 const DARK = "#242424";
 
-function createFloor(floor: FloorNumber): Spot[] {
-  return Array.from({ length: 24 }, (_, i) => ({
-    id: `${floor}-${String(i + 1).padStart(2, "0")}`,
-    occupied: (i * 7 + floor * 3) % 9 < 3,
-  }));
+// The number shown on a tile: "a-1-03" -> "03"
+function spotNumber(id: string) {
+  return id.split("-").pop() ?? id;
 }
 
-export default function GarageScreen({ garageName = "Garage A" }: { garageName?: string }) {
-  const [floor, setFloor] = useState<FloorNumber>(1);
-  const [floors, setFloors] = useState<Record<FloorNumber, Spot[]>>({
-    1: createFloor(1),
-    2: createFloor(2),
-    3: createFloor(3),
-  });
+export default function GarageScreen({
+  garageName = "Garage A",
+  garageId = "a",
+}: {
+  garageName?: string;
+  garageId?: string;
+}) {
+  const [selectedFloor, setFloor] = useState<number>(1);
+  const [floors, setFloors] = useState<Floors>({});
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [savedSpot, setSavedSpot] = useState<string | null>(null);
 
-  const spots = floors[floor];
+  // Fetch the real spots from the backend now, then every few seconds.
+  useEffect(() => {
+    let cancelled = false;
+
+    async function load() {
+      try {
+        const data = await getGarage(garageId);
+        if (cancelled) return;
+        const next: Floors = {};
+        for (const f of data.floors) {
+          next[f.floor] = f.spots.map((s) => ({ id: s.id, occupied: s.status !== "OPEN" }));
+        }
+        setFloors(next);
+        setLoadError(null);
+      } catch {
+        if (!cancelled) setLoadError("Can't reach the parking server. Retrying...");
+      }
+    }
+
+    load();
+    const timer = setInterval(load, REFRESH_MS);
+    return () => {
+      cancelled = true;
+      clearInterval(timer);
+    };
+  }, [garageId]);
+
+  const floorNumbers = Object.keys(floors).map(Number).sort((a, b) => a - b);
+  // if the selected floor doesn't exist (yet), fall back to the first real one
+  const floor = floors[selectedFloor] ? selectedFloor : floorNumbers[0] ?? 1;
+  const spots = floors[floor] ?? [];
 
   const available = spots.filter((spot) => !spot.occupied).length;
-  const totalAvailable = Object.values(floors)
-    .flat()
-    .filter((spot) => !spot.occupied).length;
+  const allSpots = Object.values(floors).flat();
+  const totalSpots = allSpots.length;
+  const totalAvailable = allSpots.filter((spot) => !spot.occupied).length;
 
   const recommended = useMemo(
     () => spots.find((spot) => !spot.occupied)?.id ?? null,
     [spots]
   );
 
-  function toggleSpot(id: string) {
-    setFloors((current) => ({
-      ...current,
-      [floor]: current[floor].map((spot) =>
-        spot.id === id ? { ...spot, occupied: !spot.occupied } : spot
-      ),
-    }));
-  }
+  const half = Math.ceil(spots.length / 2);
 
   function renderSpot(spot: Spot) {
     const isRecommended = spot.id === recommended;
 
     return (
-      <Pressable
+      <View
         key={spot.id}
-        onPress={() => toggleSpot(spot.id)}
         style={[
           styles.spot,
           spot.occupied ? styles.taken : styles.open,
@@ -70,8 +96,8 @@ export default function GarageScreen({ garageName = "Garage A" }: { garageName?:
         ]}
       >
         <Text style={styles.spotIcon}>{spot.occupied ? "🚗" : "✓"}</Text>
-        <Text style={styles.spotId}>{spot.id.split("-")[1]}</Text>
-      </Pressable>
+        <Text style={styles.spotId}>{spotNumber(spot.id)}</Text>
+      </View>
     );
   }
 
@@ -86,11 +112,13 @@ export default function GarageScreen({ garageName = "Garage A" }: { garageName?:
       <Text style={styles.subtitle}>
         Find your space, without the guesswork.
       </Text>
+      {loadError && <Text style={styles.helper}>{loadError}</Text>}
+      {!loadError && totalSpots === 0 && <Text style={styles.helper}>Loading spaces...</Text>}
 
       <View style={styles.summary}>
         <View>
           <Text style={styles.summaryLabel}>AVAILABLE SPACES</Text>
-          <Text style={styles.summaryNumber}>{totalAvailable}<Text style={styles.summaryTotal}> / 72</Text></Text>
+          <Text style={styles.summaryNumber}>{totalAvailable}<Text style={styles.summaryTotal}> / {totalSpots}</Text></Text>
         </View>
         <View style={styles.summaryIcon}>
           <Text style={styles.summaryCar}>P</Text>
@@ -99,7 +127,7 @@ export default function GarageScreen({ garageName = "Garage A" }: { garageName?:
 
       <Text style={styles.sectionTitle}>Select a floor</Text>
       <View style={styles.floorRow}>
-        {([1, 2, 3] as FloorNumber[]).map((number) => (
+        {floorNumbers.map((number) => (
           <Pressable
             key={number}
             onPress={() => setFloor(number)}
@@ -133,7 +161,7 @@ export default function GarageScreen({ garageName = "Garage A" }: { garageName?:
 
       <View style={styles.garage}>
         <View style={styles.spotRow}>
-          {spots.slice(0, 12).map(renderSpot)}
+          {spots.slice(0, half).map(renderSpot)}
         </View>
 
         <View style={styles.driveLane}>
@@ -141,18 +169,18 @@ export default function GarageScreen({ garageName = "Garage A" }: { garageName?:
         </View>
 
         <View style={styles.spotRow}>
-          {spots.slice(12, 24).map(renderSpot)}
+          {spots.slice(half).map(renderSpot)}
         </View>
       </View>
 
       <Text style={styles.helper}>
-        Tap any space to simulate a car arriving or leaving.
+        Live from the parking server. Updates every few seconds.
       </Text>
 
       <View style={styles.recommendation}>
         <Text style={styles.recommendationEyebrow}>YOUR BEST AVAILABLE SPACE</Text>
         <Text style={styles.recommendationTitle}>
-          {recommended ? `Floor ${floor} · Spot ${recommended.split("-")[1]}` : "Floor full"}
+          {recommended ? `Floor ${floor} · Spot ${spotNumber(recommended)}` : "Floor full"}
         </Text>
         <Text style={styles.recommendationDetail}>
           {recommended
@@ -171,13 +199,13 @@ export default function GarageScreen({ garageName = "Garage A" }: { garageName?:
 
         {savedSpot && (
           <Text style={styles.savedText}>
-            Saved: Floor {savedSpot.split("-")[0]}, Spot {savedSpot.split("-")[1]}
+            Saved: Floor {savedSpot.split("-")[1]}, Spot {spotNumber(savedSpot)}
           </Text>
         )}
       </View>
 
       <Text style={styles.disclaimer}>
-        Prototype parking data. Live Raspberry Pi updates coming next.
+        Prototype data: most spaces are simulated, a few are live sensors.
       </Text>
     </ScrollView>
   );
