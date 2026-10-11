@@ -207,7 +207,8 @@ export default function MySpotScreen() {
           </TouchableOpacity>
 
           <Text style={styles.note}>
-            Uses the same parking backend as the Search & Park garage details.\n            Availability may be simulated; confirm your actual location before saving.
+            Uses the same parking backend as the Search & Park garage details.
+            Availability may be simulated; confirm your actual location before saving.
           </Text>
         </>
       )}
@@ -218,7 +219,8 @@ export default function MySpotScreen() {
           <Text style={styles.title}>Confirm Your Spot</Text>
 
           <Text style={styles.subtitle}>
-            These occupied spaces come from the parking backend.\n            Select your actual space; nothing is saved until you confirm.
+            These occupied spaces come from the parking backend.
+            Select your actual space; nothing is saved until you confirm.
           </Text>
 
           {parkingSpots.map((item, index) => {
@@ -243,7 +245,7 @@ export default function MySpotScreen() {
                 </Text>
 
                 <Text style={styles.spotDetail}>
-                  Floor {item.floor} · Spot {item.spot}
+                  Floor {item.floor} · Spot {item.spot.split("-").pop() ?? item.spot}
                 </Text>
 
                 <Text style={styles.selection}>
@@ -259,6 +261,8 @@ export default function MySpotScreen() {
           <TouchableOpacity
             style={styles.button}
             onPress={confirmSpot}
+            disabled={!selectedSpot}
+            accessibilityState={{ disabled: !selectedSpot }}
             accessibilityRole="button"
           >
             <Text style={styles.buttonText}>
