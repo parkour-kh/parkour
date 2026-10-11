@@ -19,13 +19,26 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-def parse_line(line):
-    """'a-1-03,TAKEN' -> ('a-1-03', 'TAKEN'). Returns None for anything else (boot messages, noise)."""
-    parts = line.strip().split(",")
-    if len(parts) != 2:
+STATUS_WORDS = {"OPEN": "OPEN", "AVAILABLE": "OPEN", "TAKEN": "TAKEN", "OCCUPIED": "TAKEN"}
+
+
+def parse_line(line, default_spot=None):
+    """'a-1-03,TAKEN' -> ('a-1-03', 'TAKEN'). Returns None for anything else (boot messages, noise).
+
+    With default_spot set, a sensor that sends no spot id also works: a bare 'TAKEN'/'OPEN',
+    or 'SPOT_A1:OCCUPIED'/'SPOT_A1:AVAILABLE', is reported for default_spot.
+    """
+    text = line.strip()
+    if "," in text:
+        spot_id, _, word = text.partition(",")
+    elif default_spot and ":" in text:
+        spot_id, word = default_spot, text.partition(":")[2]
+    elif default_spot:
+        spot_id, word = default_spot, text
+    else:
         return None
-    spot_id, status = parts[0].strip(), parts[1].strip().upper()
-    if not spot_id or status not in ("OPEN", "TAKEN"):
+    spot_id, status = spot_id.strip(), STATUS_WORDS.get(word.strip().upper())
+    if not spot_id or status is None:
         return None
     return spot_id, status
 
@@ -42,15 +55,27 @@ def main():
     ap.add_argument("--baud", type=int, default=9600)
     ap.add_argument("--api", default=os.getenv("API_URL", "http://localhost:5000"))
     ap.add_argument("--token", default=os.getenv("SENSOR_TOKEN", ""))
+    ap.add_argument("--spot", default=os.getenv("SPOT_ID", ""),
+                    help="spot id to use when the sensor prints only TAKEN/OPEN, e.g. a-1-03")
+    ap.add_argument("--debug", action="store_true", help="print every raw line received from the sensor")
     args = ap.parse_args()
 
     last = {}  # spot_id -> last status we sent, so we only POST changes
     print(f"Reading {args.port} @ {args.baud}, posting to {args.api}")
     with serial.Serial(args.port, args.baud, timeout=1) as ser:
         time.sleep(2)  # the Arduino resets when the port opens
+        silent_reads = 0
         while True:
             raw = ser.readline().decode("utf-8", errors="ignore")
-            parsed = parse_line(raw)
+            parsed = parse_line(raw, args.spot or None)
+            if args.debug:
+                if raw.strip():
+                    silent_reads = 0
+                    print("got:", repr(raw.strip()), "->", parsed if parsed else "IGNORED (format not recognised)")
+                else:
+                    silent_reads += 1
+                    if silent_reads % 5 == 0:
+                        print(f"...no data from {args.port} for {silent_reads}s (is the sketch running on this port?)")
             if parsed is None:
                 continue
             spot_id, status = parsed
