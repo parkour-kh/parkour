@@ -11,18 +11,19 @@ from recommend import VALID_USER_TYPES, recommend
 
 bp = Blueprint("api", __name__, url_prefix="/api")
 
-GOOGLE_BASE = "https://places.googleapis.com/v1"
-UCF_LAT, UCF_LNG = 28.6024, -81.2001
 
-REPORT_CATEGORIES = ("blocked_space", "broken_light", "broken_sign", "debris", "violation", "other")
+
+def body():
+    return request.get_json(silent=True) or {}
 
 
 def error(message, status=400):
     return jsonify(error=message), status
 
+GOOGLE_BASE = "https://places.googleapis.com/v1"
+UCF_LAT, UCF_LNG = 28.6024, -81.2001
 
-def body():
-    return request.get_json(silent=True) or {}
+REPORT_CATEGORIES = ("blocked_space", "broken_light", "broken_sign", "debris", "violation", "other")
 
 
 def sensor_authorized():
