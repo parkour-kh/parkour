@@ -1,4 +1,4 @@
-
+﻿
 import React from "react";
 import {
   Alert,
@@ -186,16 +186,14 @@ export default function NeedAssistance() {
           </Text>
 
           <Text style={styles.description}>
-            Powered by ElevenLabs. Speak your questions,
-            listen to AI responses, and access parking
-            information through voice.
-          </Text>
+  Listen to parking information using ElevenLabs
+  voice technology. No account required.
+</Text>
 
           <TouchableOpacity
             style={styles.goldButton}
-            onPress={() =>
-              comingSoon("ElevenLabs Voice Assistance")
-            }
+            
+            onPress={() => router.push("/voice-accessibility")}
             accessibilityRole="button"
           >
             <Ionicons
@@ -360,3 +358,9 @@ const styles = StyleSheet.create({
     lineHeight: 19,
   },
 });
+
+
+
+
+
+
