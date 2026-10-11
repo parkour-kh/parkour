@@ -1,266 +1,171 @@
-
-import React, { useEffect, useState } from "react";
-import * as Speech from "expo-speech";
+﻿
+import React from "react";
 import {
-  Alert,
-  Linking,
-  Pressable,
-  ScrollView,
+  SafeAreaView,
   StyleSheet,
   Text,
-  TextInput,
+  Pressable,
   View,
 } from "react-native";
-import { Stack, useRouter } from "expo-router";
+import { WebView } from "react-native-webview";
+import { useRouter } from "expo-router";
 
-const SAMPLE =
-  "Welcome to Parkour. Choose your destination, check the parking rules for your permit, and park safely. For assistance, visit UCF Parking and Transportation Services.";
+const GREEN = "#344238";
+const GOLD = "#D4AF37";
+const CREAM = "#F8FAF8";
 
-export default function VoiceAccessibility() {
+const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1"
+  />
+  <style>
+    body {
+      margin: 0;
+      padding: 24px 16px;
+      background: #F8FAF8;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #344238;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 24px;
+      margin-top: 28px;
+    }
+
+    p {
+      color: #555;
+      line-height: 1.6;
+    }
+
+    .voice-widget {
+      margin-top: 48px;
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <h2>Talk to Parkour</h2>
+
+  <p>
+    Ask about UCF parking, garages, permits,
+    and accessibility.
+  </p>
+
+  <div class="voice-widget">
+    <elevenlabs-convai
+      agent-id="agent_8701m4mamhgffjsa5nabxfxkampn">
+    </elevenlabs-convai>
+  </div>
+
+  <script
+    src="https://unpkg.com/@elevenlabs/convai-widget-embed"
+    async
+    type="text/javascript">
+  </script>
+</body>
+</html>
+`;
+
+export default function VoiceAccessibilityScreen() {
   const router = useRouter();
 
-  const [text, setText] = useState(SAMPLE);
-  const [speaking, setSpeaking] = useState(false);
-
-  useEffect(() => {
-    return () => {
-      Speech.stop();
-    };
-  }, []);
-
-  async function speakText() {
-    if (!text.trim()) return;
-
-    try {
-      await Speech.stop();
-
-      setSpeaking(true);
-
-      Speech.speak(text.trim(), {
-        language: "en-US",
-        rate: 0.9,
-        pitch: 1.0,
-        onDone: () => setSpeaking(false),
-        onStopped: () => setSpeaking(false),
-        onError: () => {
-          setSpeaking(false);
-          Alert.alert(
-            "Voice unavailable",
-            "Unable to play speech on this device."
-          );
-        },
-      });
-    } catch (error) {
-      console.error("Voice error:", error);
-      setSpeaking(false);
-      Alert.alert(
-        "Voice unavailable",
-        "Please try again."
-      );
-    }
-  }
-
-  async function stopSpeaking() {
-    try {
-      await Speech.stop();
-      setSpeaking(false);
-    } catch (error) {
-      console.error("Stop speech error:", error);
-    }
-  }
-
   return (
-    <View style={styles.container}>
-      <Stack.Screen options={{ headerShown: false }} />
-
-      <ScrollView
-        contentContainerStyle={styles.content}
-        keyboardShouldPersistTaps="handled"
-      >
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
         <Pressable
-          onPress={() => router.replace("/")}
+          onPress={() => router.back()}
           style={styles.backButton}
         >
-          <Text style={styles.backButtonText}>
-            ← Parkour
-          </Text>
+          <Text style={styles.backText}>â† Back</Text>
         </Pressable>
 
-        <Text style={styles.heading}>
-          Voice accessibility
+        <Text style={styles.title}>
+          Parkour Voice Assistant
         </Text>
 
         <Text style={styles.subtitle}>
-          Hear parking information spoken aloud.
-          All information remains available on screen.
+          Your hands-free UCF parking guide
         </Text>
+      </View>
 
-        <Text style={styles.label}>
-          Text to speak
+      <WebView
+        originWhitelist={["*"]}
+        source={{ uri: "https://elevenlabs.io/app/talk-to?agent_id=agent_8701m4mamhgffjsa5nabxfxkampn" }}
+        javaScriptEnabled={true}
+        domStorageEnabled={true}
+        allowsInlineMediaPlayback={true}
+        mediaPlaybackRequiresUserAction={false}
+        style={styles.webview}
+      />
+
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>
+          Parking availability may change.
+          Check official UCF information.
         </Text>
-
-        <TextInput
-          multiline
-          accessibilityLabel="Text for voice assistance"
-          value={text}
-          onChangeText={setText}
-          maxLength={1500}
-          style={styles.input}
-          textAlignVertical="top"
-        />
-
-        <Pressable
-          accessibilityRole="button"
-          disabled={!text.trim()}
-          onPress={speakText}
-          style={[
-            styles.button,
-            !text.trim() && styles.disabled,
-          ]}
-        >
-          <Text style={styles.buttonText}>
-            {speaking
-              ? "Restart parking information"
-              : "Speak parking information"}
-          </Text>
-        </Pressable>
-
-        <Pressable
-          accessibilityRole="button"
-          disabled={!speaking}
-          onPress={stopSpeaking}
-          style={[
-            styles.button,
-            !speaking && styles.disabled,
-          ]}
-        >
-          <Text style={styles.buttonText}>
-            Stop audio
-          </Text>
-        </Pressable>
-
-        <Text style={styles.note}>
-          Use this feature while parked, not while
-          driving. Speech is generated using your
-          device's voice system.
-        </Text>
-
-        <Pressable
-          onPress={() =>
-            Linking.openURL("https://parking.ucf.edu/")
-          }
-        >
-          <Text style={styles.link}>
-            Official UCF parking information ↗
-          </Text>
-        </Pressable>
-
-        <Pressable
-          onPress={() => router.replace("/")}
-        >
-          <Text style={styles.back}>
-            Return to Parkour home
-          </Text>
-        </Pressable>
-      </ScrollView>
-    </View>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8FAF8",
+    backgroundColor: CREAM,
   },
 
-  content: {
-    padding: 24,
-    paddingTop: 36,
-    paddingBottom: 64,
+  header: {
+    backgroundColor: GREEN,
+    paddingHorizontal: 20,
+    paddingTop: 18,
+    paddingBottom: 24,
   },
 
   backButton: {
-    marginBottom: 30,
+    marginBottom: 18,
   },
 
-  backButtonText: {
-    fontSize: 17,
+  backText: {
+    color: GOLD,
+    fontSize: 16,
     fontWeight: "600",
-    color: "#344238",
   },
 
-  heading: {
-    fontSize: 30,
+  title: {
+    color: "#FFFFFF",
+    fontSize: 25,
     fontWeight: "800",
-    color: "#344238",
-    marginBottom: 12,
   },
 
   subtitle: {
-    fontSize: 16,
-    lineHeight: 25,
-    color: "#55534F",
-    marginBottom: 28,
-  },
-
-  label: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: "#344238",
-    marginBottom: 10,
-  },
-
-  input: {
-    minHeight: 160,
-    padding: 16,
-    borderRadius: 14,
-    backgroundColor: "#FFFFFF",
-    borderWidth: 1,
-    borderColor: "#D9D4C3",
-    fontSize: 16,
-    lineHeight: 24,
-    color: "#242424",
-  },
-
-  button: {
-    backgroundColor: "#D4AF37",
-    padding: 18,
-    borderRadius: 14,
-    alignItems: "center",
-    marginTop: 18,
-    marginBottom: 10,
-    minHeight: 58,
-    justifyContent: "center",
-  },
-
-  disabled: {
-    opacity: 0.45,
-  },
-
-  buttonText: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: "#242424",
-  },
-
-  note: {
+    color: "#E6EAE6",
     fontSize: 14,
-    lineHeight: 22,
-    color: "#77756F",
-    marginTop: 28,
-    marginBottom: 24,
+    marginTop: 6,
   },
 
-  link: {
-    fontSize: 16,
-    color: "#344238",
-    textDecorationLine: "underline",
-    marginBottom: 24,
+  webview: {
+    flex: 1,
+    backgroundColor: CREAM,
   },
 
-  back: {
-    fontSize: 16,
-    color: "#344238",
-    fontWeight: "600",
+  footer: {
+    padding: 14,
+    backgroundColor: CREAM,
+    borderTopWidth: 1,
+    borderTopColor: "#E1E5E1",
+  },
+
+  footerText: {
+    color: GREEN,
+    fontSize: 12,
+    textAlign: "center",
   },
 });
+
