@@ -1,5 +1,5 @@
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   ScrollView,
   View,
@@ -7,6 +7,7 @@ import {
   Pressable,
   StyleSheet,
 } from "react-native";
+import { getGarage } from "../../api";
 import { useParkourTheme } from "@/contexts/parkour-theme";
 
 type Spot = {
@@ -14,7 +15,9 @@ type Spot = {
   occupied: boolean;
 };
 
-type FloorNumber = 1 | 2 | 3;
+type Floors = Record<number, Spot[]>;
+
+const REFRESH_MS = 3000;
 
 const LIGHT_COLORS = {
   background: "#F8FAF8",
@@ -38,10 +41,10 @@ const LIGHT_COLORS = {
   spotText: "#242424",
   driveLane: "#D3D8D1",
   driveLaneText: "#6C776E",
-  cardBorder: "#E1E7E1",
   saveButton: "#344238",
   saveText: "#FFFFFF",
   goldText: "#344238",
+  error: "#B23B32",
 };
 
 const DARK_COLORS = {
@@ -66,90 +69,134 @@ const DARK_COLORS = {
   spotText: "#FFFFFF",
   driveLane: "#354358",
   driveLaneText: "#D1D9E6",
-  cardBorder: "#354358",
   saveButton: "#D4AF37",
   saveText: "#242424",
   goldText: "#242424",
+  error: "#FF9F98",
 };
 
-function createFloor(floor: FloorNumber): Spot[] {
-  return Array.from({ length: 24 }, (_, i) => ({
-    id: `${floor}-${String(i + 1).padStart(2, "0")}`,
-    occupied: (i * 7 + floor * 3) % 9 < 3,
-  }));
+function spotNumber(id: string) {
+  return id.split("-").pop() ?? id;
 }
 
 export default function GarageScreen({
   garageName = "Garage A",
+  garageId = "a",
 }: {
   garageName?: string;
+  garageId?: string;
 }) {
   const { isDark } = useParkourTheme();
 
   const COLORS = isDark ? DARK_COLORS : LIGHT_COLORS;
   const styles = createStyles(COLORS);
 
-  const [floor, setFloor] = useState<FloorNumber>(1);
+  const [selectedFloor, setFloor] = useState<number>(1);
+  const [floors, setFloors] = useState<Floors>({});
+  const [loadError, setLoadError] = useState<string | null>(
+    null
+  );
+  const [savedSpot, setSavedSpot] = useState<string | null>(
+    null
+  );
 
-  const [floors, setFloors] = useState<Record<FloorNumber, Spot[]>>({
-    1: createFloor(1),
-    2: createFloor(2),
-    3: createFloor(3),
-  });
+  // Keep your teammate's backend integration.
+  // Fetch spaces now, then refresh every 3 seconds.
+  useEffect(() => {
+    let cancelled = false;
 
-  const [savedSpot, setSavedSpot] = useState<string | null>(null);
+    async function load() {
+      try {
+        const data = await getGarage(garageId);
 
-  const spots = floors[floor];
+        if (cancelled) return;
+
+        const next: Floors = {};
+
+        for (const floorData of data.floors) {
+          next[floorData.floor] = floorData.spots.map(
+            (spot) => ({
+              id: spot.id,
+              occupied: spot.status !== "OPEN",
+            })
+          );
+        }
+
+        setFloors(next);
+        setLoadError(null);
+      } catch {
+        if (!cancelled) {
+          setLoadError(
+            "Can't reach the parking server. Retrying..."
+          );
+        }
+      }
+    }
+
+    void load();
+
+    const timer = setInterval(() => {
+      void load();
+    }, REFRESH_MS);
+
+    return () => {
+      cancelled = true;
+      clearInterval(timer);
+    };
+  }, [garageId]);
+
+  const floorNumbers = Object.keys(floors)
+    .map(Number)
+    .sort((a, b) => a - b);
+
+  const floor = floors[selectedFloor]
+    ? selectedFloor
+    : floorNumbers[0] ?? 1;
+
+  const spots = floors[floor] ?? [];
 
   const available = spots.filter(
     (spot) => !spot.occupied
   ).length;
 
-  const totalAvailable = Object.values(floors)
-    .flat()
-    .filter((spot) => !spot.occupied).length;
+  const allSpots = Object.values(floors).flat();
+  const totalSpots = allSpots.length;
+
+  const totalAvailable = allSpots.filter(
+    (spot) => !spot.occupied
+  ).length;
 
   const recommended = useMemo(
     () => spots.find((spot) => !spot.occupied)?.id ?? null,
     [spots]
   );
 
-  function toggleSpot(id: string) {
-    setFloors((current) => ({
-      ...current,
-      [floor]: current[floor].map((spot) =>
-        spot.id === id
-          ? { ...spot, occupied: !spot.occupied }
-          : spot
-      ),
-    }));
-  }
+  const half = Math.ceil(spots.length / 2);
 
   function renderSpot(spot: Spot) {
     const isRecommended = spot.id === recommended;
 
     return (
-      <Pressable
+      <View
         key={spot.id}
-        onPress={() => toggleSpot(spot.id)}
-        accessibilityRole="button"
-        accessibilityLabel={`Spot ${spot.id}, ${
-          spot.occupied ? "occupied" : "available"
-        }`}
         style={[
           styles.spot,
           spot.occupied ? styles.taken : styles.open,
           isRecommended && styles.recommendedSpot,
         ]}
+        accessible
+        accessibilityLabel={`Spot ${spotNumber(spot.id)}, ${
+          spot.occupied ? "occupied" : "available"
+        }${isRecommended ? ", recommended" : ""}`}
       >
         <Text style={styles.spotIcon}>
           {spot.occupied ? "🚗" : "✓"}
         </Text>
 
         <Text style={styles.spotId}>
-          {spot.id.split("-")[1]}
+          {spotNumber(spot.id)}
         </Text>
-      </Pressable>
+      </View>
     );
   }
 
@@ -171,7 +218,19 @@ export default function GarageScreen({
         Find your space, without the guesswork.
       </Text>
 
-      {/* TOTAL AVAILABILITY */}
+      {loadError && (
+        <Text style={styles.errorText}>
+          {loadError}
+        </Text>
+      )}
+
+      {!loadError && totalSpots === 0 && (
+        <Text style={styles.helper}>
+          Loading spaces...
+        </Text>
+      )}
+
+      {/* AVAILABILITY SUMMARY */}
       <View style={styles.summary}>
         <View>
           <Text style={styles.summaryLabel}>
@@ -181,13 +240,15 @@ export default function GarageScreen({
           <Text style={styles.summaryNumber}>
             {totalAvailable}
             <Text style={styles.summaryTotal}>
-              {" "} / 72
+              {" "} / {totalSpots}
             </Text>
           </Text>
         </View>
 
         <View style={styles.summaryIcon}>
-          <Text style={styles.summaryCar}>P</Text>
+          <Text style={styles.summaryCar}>
+            P
+          </Text>
         </View>
       </View>
 
@@ -197,7 +258,7 @@ export default function GarageScreen({
       </Text>
 
       <View style={styles.floorRow}>
-        {([1, 2, 3] as FloorNumber[]).map((number) => (
+        {floorNumbers.map((number) => (
           <Pressable
             key={number}
             onPress={() => setFloor(number)}
@@ -222,7 +283,7 @@ export default function GarageScreen({
         ))}
       </View>
 
-      {/* FLOOR AVAILABILITY */}
+      {/* SELECTED FLOOR */}
       <View style={styles.floorHeading}>
         <Text style={styles.sectionTitle}>
           Floor {floor}
@@ -235,15 +296,23 @@ export default function GarageScreen({
 
       {/* LEGEND */}
       <View style={styles.legend}>
-        <Text style={styles.legendText}>🟢 Open</Text>
-        <Text style={styles.legendText}>⚪ Taken</Text>
-        <Text style={styles.legendText}>⭐ Recommended</Text>
+        <Text style={styles.legendText}>
+          🟢 Open
+        </Text>
+
+        <Text style={styles.legendText}>
+          ⚪ Taken
+        </Text>
+
+        <Text style={styles.legendText}>
+          ⭐ Recommended
+        </Text>
       </View>
 
-      {/* INTERACTIVE GARAGE */}
+      {/* PARKING SPACE GRID */}
       <View style={styles.garage}>
         <View style={styles.spotRow}>
-          {spots.slice(0, 12).map(renderSpot)}
+          {spots.slice(0, half).map(renderSpot)}
         </View>
 
         <View style={styles.driveLane}>
@@ -253,15 +322,16 @@ export default function GarageScreen({
         </View>
 
         <View style={styles.spotRow}>
-          {spots.slice(12, 24).map(renderSpot)}
+          {spots.slice(half).map(renderSpot)}
         </View>
       </View>
 
       <Text style={styles.helper}>
-        Tap any space to simulate a car arriving or leaving.
+        Parking availability comes from the server
+        and refreshes every few seconds.
       </Text>
 
-      {/* RECOMMENDED SPACE */}
+      {/* RECOMMENDATION */}
       <View style={styles.recommendation}>
         <Text style={styles.recommendationEyebrow}>
           YOUR BEST AVAILABLE SPACE
@@ -269,14 +339,18 @@ export default function GarageScreen({
 
         <Text style={styles.recommendationTitle}>
           {recommended
-            ? `Floor ${floor} · Spot ${recommended.split("-")[1]}`
-            : "Floor full"}
+            ? `Floor ${floor} · Spot ${spotNumber(recommended)}`
+            : totalSpots === 0
+              ? "Waiting for parking data"
+              : "Floor full"}
         </Text>
 
         <Text style={styles.recommendationDetail}>
           {recommended
             ? "Highlighted in gold on the garage map."
-            : "Try selecting another floor."}
+            : totalSpots === 0
+              ? "Parking spaces will appear when the server responds."
+              : "Try selecting another floor."}
         </Text>
 
         {recommended && (
@@ -293,14 +367,15 @@ export default function GarageScreen({
 
         {savedSpot && (
           <Text style={styles.savedText}>
-            Saved: Floor {savedSpot.split("-")[0]},
-            Spot {savedSpot.split("-")[1]}
+            Saved: Floor {savedSpot.split("-")[1]},
+            Spot {spotNumber(savedSpot)}
           </Text>
         )}
       </View>
 
       <Text style={styles.disclaimer}>
-        Prototype parking data. Live Raspberry Pi updates coming next.
+        Prototype data: most spaces are simulated,
+        and a few are connected to live sensors.
       </Text>
     </ScrollView>
   );
@@ -337,6 +412,13 @@ function createStyles(COLORS: typeof LIGHT_COLORS) {
       fontSize: 14,
       marginTop: 5,
       marginBottom: 22,
+    },
+
+    errorText: {
+      color: COLORS.error,
+      fontSize: 13,
+      marginBottom: 14,
+      lineHeight: 20,
     },
 
     summary: {
@@ -527,7 +609,7 @@ function createStyles(COLORS: typeof LIGHT_COLORS) {
       borderRadius: 17,
       padding: 20,
       borderWidth: 1,
-      borderColor: COLORS.cardBorder,
+      borderColor: COLORS.border,
     },
 
     recommendationEyebrow: {

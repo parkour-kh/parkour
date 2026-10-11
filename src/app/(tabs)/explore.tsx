@@ -10,10 +10,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import MapView, {
-  Marker,
-  PROVIDER_DEFAULT,
-} from "react-native-maps";
+import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 import * as Location from "expo-location";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -102,11 +99,6 @@ const DARK_MAP_STYLE = [
     elementType: "geometry",
     stylers: [{ color: "#263D35" }],
   },
-  {
-    featureType: "transit",
-    elementType: "geometry",
-    stylers: [{ color: "#283445" }],
-  },
 ];
 
 function distanceMeters(
@@ -180,7 +172,6 @@ export default function ExploreScreen() {
 
   const [selectedGarageId, setSelectedGarageId] =
     useState<string | null>(null);
-
   const [simulateFull, setSimulateFull] = useState(false);
   const [showGarageDetails, setShowGarageDetails] = useState(false);
   const [hasLocationPermission, setHasLocationPermission] =
@@ -208,6 +199,7 @@ export default function ExploreScreen() {
         if ((a.available > 0) !== (b.available > 0)) {
           return a.available > 0 ? -1 : 1;
         }
+
         return a.distance - b.distance;
       });
   }, [
@@ -314,6 +306,7 @@ export default function ExploreScreen() {
             size={22}
             color={COLORS.recommendationText}
           />
+
           <Text style={styles.detailsBackText}>
             Back to recommendations
           </Text>
@@ -322,6 +315,7 @@ export default function ExploreScreen() {
         <View style={styles.flex}>
           <GarageScreen
             garageName={selectedGarage?.name ?? "Garage A"}
+            garageId={selectedGarage?.id ?? "a"}
           />
         </View>
       </SafeAreaView>
@@ -330,7 +324,6 @@ export default function ExploreScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* HEADER */}
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => router.back()}
@@ -371,7 +364,6 @@ export default function ExploreScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* MAP */}
       <View style={styles.mapContainer}>
         <MapView
           ref={mapRef}
@@ -431,7 +423,6 @@ export default function ExploreScreen() {
         </View>
       </View>
 
-      {/* RECOMMENDATIONS */}
       <ScrollView
         style={styles.bottomPanel}
         contentContainerStyle={styles.bottomContent}
@@ -444,8 +435,9 @@ export default function ExploreScreen() {
             color={COLORS.noticeText}
           />
           <Text style={styles.demoText}>
-            Real map geography. Garage locations,
-            permit rules and availability are demo data.
+            Real map geography. Garage recommendations,
+            permit rules, and availability here use demo
+            data. Garage details can display backend data.
           </Text>
         </View>
 
@@ -459,9 +451,7 @@ export default function ExploreScreen() {
               ]}
               onPress={() => setPermit(type)}
               accessibilityRole="button"
-              accessibilityState={{
-                selected: permit === type,
-              }}
+              accessibilityState={{ selected: permit === type }}
             >
               <Text style={styles.permitText}>{type}</Text>
             </TouchableOpacity>
@@ -504,6 +494,7 @@ export default function ExploreScreen() {
                 size={18}
                 color={COLORS.buttonText}
               />
+
               <Text style={styles.directionsText}>
                 Get directions
               </Text>
@@ -546,7 +537,6 @@ export default function ExploreScreen() {
               <Text style={styles.garageName}>
                 {garage.name}
               </Text>
-
               <Text style={styles.garageMeta}>
                 {garage.available === 0
                   ? "Full"
@@ -572,6 +562,7 @@ export default function ExploreScreen() {
             size={19}
             color={COLORS.green}
           />
+
           <Text style={styles.simulateText}>
             {simulateFull
               ? "Reset garage availability"
@@ -580,10 +571,10 @@ export default function ExploreScreen() {
         </TouchableOpacity>
 
         <Text style={styles.disclaimer}>
-          Demo recommendations are not verified
-          parking guidance. Confirm official UCF
-          garage locations, entrances, permits and
-          restrictions before relying on them.
+          Demo recommendations are not verified parking
+          guidance. Confirm official UCF garage locations,
+          entrances, permits, and restrictions before
+          relying on them.
         </Text>
       </ScrollView>
     </SafeAreaView>
@@ -592,13 +583,13 @@ export default function ExploreScreen() {
 
 function createStyles(COLORS: typeof LIGHT_COLORS) {
   return StyleSheet.create({
-    flex: {
-      flex: 1,
-    },
+    flex: { flex: 1 },
+
     container: {
       flex: 1,
       backgroundColor: COLORS.background,
     },
+
     detailsBack: {
       backgroundColor: COLORS.recommendation,
       padding: 16,
@@ -606,10 +597,12 @@ function createStyles(COLORS: typeof LIGHT_COLORS) {
       alignItems: "center",
       gap: 10,
     },
+
     detailsBackText: {
       color: COLORS.recommendationText,
       fontWeight: "700",
     },
+
     header: {
       flexDirection: "row",
       alignItems: "center",
@@ -620,21 +613,25 @@ function createStyles(COLORS: typeof LIGHT_COLORS) {
       borderBottomWidth: 1,
       borderBottomColor: COLORS.border,
     },
+
     headerTitle: {
       fontSize: 18,
       fontWeight: "800",
       color: COLORS.text,
     },
+
     headerSubtitle: {
       fontSize: 12,
       color: COLORS.muted,
       marginTop: 3,
     },
+
     mapContainer: {
       height: "43%",
       position: "relative",
       backgroundColor: COLORS.mapBackground,
     },
+
     mapLegend: {
       position: "absolute",
       top: 12,
@@ -646,17 +643,19 @@ function createStyles(COLORS: typeof LIGHT_COLORS) {
       borderWidth: 1,
       borderColor: COLORS.border,
     },
+
     legendText: {
       fontSize: 11,
       color: COLORS.text,
     },
-    bottomPanel: {
-      flex: 1,
-    },
+
+    bottomPanel: { flex: 1 },
+
     bottomContent: {
       padding: 18,
       paddingBottom: 50,
     },
+
     demoBanner: {
       flexDirection: "row",
       gap: 9,
@@ -665,17 +664,20 @@ function createStyles(COLORS: typeof LIGHT_COLORS) {
       borderRadius: 12,
       marginBottom: 15,
     },
+
     demoText: {
       flex: 1,
       fontSize: 12,
       lineHeight: 18,
       color: COLORS.noticeText,
     },
+
     permitRow: {
       flexDirection: "row",
       gap: 10,
       marginBottom: 15,
     },
+
     permitButton: {
       flex: 1,
       padding: 12,
@@ -685,16 +687,19 @@ function createStyles(COLORS: typeof LIGHT_COLORS) {
       borderColor: COLORS.border,
       alignItems: "center",
     },
+
     permitSelected: {
       borderColor: COLORS.gold,
       backgroundColor: COLORS.selected,
       borderWidth: 2,
     },
+
     permitText: {
       fontSize: 14,
       fontWeight: "600",
       color: COLORS.text,
     },
+
     recommendationCard: {
       backgroundColor: COLORS.recommendation,
       borderRadius: 16,
@@ -703,9 +708,11 @@ function createStyles(COLORS: typeof LIGHT_COLORS) {
       borderWidth: 1,
       borderColor: COLORS.border,
     },
+
     recommendationHeader: {
       marginBottom: 15,
     },
+
     recommendationLabel: {
       fontSize: 11,
       fontWeight: "800",
@@ -713,17 +720,20 @@ function createStyles(COLORS: typeof LIGHT_COLORS) {
       color: COLORS.gold,
       marginBottom: 10,
     },
+
     garageTitle: {
       fontSize: 25,
       fontWeight: "800",
       color: COLORS.recommendationText,
       marginBottom: 9,
     },
+
     garageDetails: {
       fontSize: 13,
       color: COLORS.recommendationMuted,
       marginBottom: 5,
     },
+
     directionsButton: {
       backgroundColor: COLORS.gold,
       padding: 13,
@@ -733,11 +743,13 @@ function createStyles(COLORS: typeof LIGHT_COLORS) {
       justifyContent: "center",
       gap: 8,
     },
+
     directionsText: {
       fontSize: 14,
       fontWeight: "700",
       color: COLORS.buttonText,
     },
+
     viewSpacesButton: {
       backgroundColor: COLORS.detailButton,
       borderRadius: 10,
@@ -745,21 +757,25 @@ function createStyles(COLORS: typeof LIGHT_COLORS) {
       alignItems: "center",
       marginTop: 10,
     },
+
     viewSpacesText: {
       color: COLORS.detailButtonText,
       fontWeight: "800",
     },
+
     noGarages: {
       fontSize: 14,
       color: COLORS.muted,
       paddingVertical: 20,
     },
+
     sectionTitle: {
       fontSize: 18,
       fontWeight: "700",
       color: COLORS.text,
       marginBottom: 12,
     },
+
     garageRow: {
       flexDirection: "row",
       alignItems: "center",
@@ -771,16 +787,19 @@ function createStyles(COLORS: typeof LIGHT_COLORS) {
       borderWidth: 1,
       borderColor: COLORS.border,
     },
+
     garageName: {
       fontSize: 15,
       fontWeight: "700",
       color: COLORS.text,
     },
+
     garageMeta: {
       fontSize: 12,
       color: COLORS.muted,
       marginTop: 4,
     },
+
     simulateButton: {
       flexDirection: "row",
       alignItems: "center",
@@ -792,11 +811,13 @@ function createStyles(COLORS: typeof LIGHT_COLORS) {
       padding: 15,
       marginTop: 14,
     },
+
     simulateText: {
       fontSize: 13,
       fontWeight: "600",
       color: COLORS.green,
     },
+
     disclaimer: {
       fontSize: 11,
       lineHeight: 18,
