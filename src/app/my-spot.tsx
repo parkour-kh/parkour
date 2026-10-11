@@ -7,6 +7,7 @@ import {
   ScrollView,
   StyleSheet,
   Alert,
+  TextInput,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
@@ -66,6 +67,8 @@ export default function MySpotScreen() {
   const [loading, setLoading] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [garageId, setGarageId] = useState("a");
+  const [manualFloor, setManualFloor] = useState("");
+  const [manualSpot, setManualSpot] = useState("");
 
   const [selectedSpot, setSelectedSpot] =
     useState<ParkingSpot | null>(null);
@@ -108,6 +111,22 @@ export default function MySpotScreen() {
       setLoadError("Could not connect to the parking backend. Check your server and try again.");
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function saveManualSpot() {
+    if (!manualFloor.trim() || !manualSpot.trim()) {
+      Alert.alert("Missing details", "Enter your floor and spot number.");
+      return;
+    }
+    const garageName = GARAGES.find((g) => g.id === garageId)?.name ?? `Garage ${garageId.toUpperCase()}`;
+    const spot = { garage: garageName, floor: manualFloor.trim(), spot: manualSpot.trim() };
+    try {
+      await AsyncStorage.setItem("myParkingSpot", JSON.stringify(spot));
+      setSelectedSpot(spot);
+      setStep("saved");
+    } catch {
+      Alert.alert("Error", "Could not save your parking spot.");
     }
   }
 
@@ -205,6 +224,30 @@ export default function MySpotScreen() {
               {loading ? "Loading occupied spots..." : "Check occupied parking spots"}
             </Text>
           </TouchableOpacity>
+
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>Or enter your spot manually</Text>
+            <Text style={styles.spotDetail}>You can always save your location, even if the live parking connection is unavailable.</Text>
+            <TextInput
+              style={styles.manualInput}
+              placeholder="Floor (e.g. 2)"
+              placeholderTextColor={COLORS.muted}
+              value={manualFloor}
+              onChangeText={setManualFloor}
+              accessibilityLabel="Parking floor"
+            />
+            <TextInput
+              style={styles.manualInput}
+              placeholder="Spot (e.g. 14)"
+              placeholderTextColor={COLORS.muted}
+              value={manualSpot}
+              onChangeText={setManualSpot}
+              accessibilityLabel="Parking spot number"
+            />
+            <TouchableOpacity style={styles.button} onPress={() => void saveManualSpot()} accessibilityRole="button">
+              <Text style={styles.buttonText}>Save My Spot Manually</Text>
+            </TouchableOpacity>
+          </View>
 
           <Text style={styles.note}>
             Uses the same parking backend as the Search & Park garage details.
@@ -308,10 +351,7 @@ export default function MySpotScreen() {
 
           <TouchableOpacity
             style={styles.button}
-            onPress={() => {
-              setSelectedSpot(null);
-              setStep("start");
-            }}
+            onPress={() => void clearSpot()}
             accessibilityRole="button"
           >
             <Text style={styles.buttonText}>
@@ -413,6 +453,17 @@ function createStyles(COLORS: typeof LIGHT_COLORS) {
       color: COLORS.muted,
       textAlign: "center",
       marginTop: 20,
+    },
+
+    manualInput: {
+      borderWidth: 1,
+      borderColor: COLORS.border,
+      backgroundColor: COLORS.spotCard,
+      color: COLORS.text,
+      padding: 14,
+      borderRadius: 12,
+      marginTop: 12,
+      fontSize: 16,
     },
 
     spotCard: {
